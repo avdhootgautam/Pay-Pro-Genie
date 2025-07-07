@@ -4,6 +4,7 @@ import ForgotPassword from "./ForgotPassword";
 import OTPtoLogin from "./OTPtoLogin";
 // import {Visibility ,VisibilityOff} from "@mui/icons-material";
 import PasswordField from "./PasswordField";
+import SignupButton from "./SignupButton";
 const LoginForm = () => {
   return (
     <Box
@@ -25,7 +26,7 @@ const LoginForm = () => {
         Login
       </Button>
       <OTPtoLogin/>
-
+      <SignupButton/>
     </Box>
   );
 };

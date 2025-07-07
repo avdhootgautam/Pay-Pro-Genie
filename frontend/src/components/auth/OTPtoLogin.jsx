@@ -10,7 +10,9 @@ import {Box} from "@mui/material"
         to="/otp-login"
         variant="body2"
         underline="hover"
-        sx={{"curesor":"pointer"}}
+        sx={{"curesor":"pointer",
+            fontSize:"16px"
+        }}
         >
             Use OTP to login
         </MuiLink>
