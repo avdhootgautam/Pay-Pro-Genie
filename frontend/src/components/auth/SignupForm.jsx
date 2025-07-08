@@ -9,7 +9,7 @@ import {
 import { Link as RouterLink } from "react-router-dom";
 import signupUser from "../../services/authService"
 import SnackBarAlert from "./SnackBarAlert";
-const SignupPage = () => {
+const SignupForm= () => {
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -148,4 +148,4 @@ const SignupPage = () => {
   );
 };
 
-export default SignupPage;
+export default SignupForm;

@@ -16,4 +16,4 @@ class signup_mongo():
         return user_presence
     
 if __name__=="__main__":
-    object1=login_mongo()
+    object1=signup_mongo()
