@@ -8,7 +8,7 @@ const signupUser=async(formData)=>{
         const result=await response.json();
         return result;
     }catch(error){
-        console.log("Signup failed: ",error)
+        console.error("Signup failed: ",error)
         throw error;
     }
 };

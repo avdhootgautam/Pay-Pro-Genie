@@ -8,12 +8,18 @@ import {
 } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import signupUser from "../../services/authService"
+import SnackBarAlert from "./SnackBarAlert";
 const SignupPage = () => {
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     password: "",
     confirmPassword: "",
+  });
+  const[snackbar,setSnackbar]=useState({
+    open:false,
+    message:"",
+    severity:"success"
   });
 
   const handleChange = (e) => {
@@ -23,23 +29,35 @@ const SignupPage = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Basic validation logic
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match");
+      setSnackbar({
+        open:true,
+        message:"Passwords do not match",
+        severity:"error",
+      });
       return;
     }
 
     // TODO: send formData to your backend
     try{
-        const result= signupUser(formData);//Using Service
+        const result= await signupUser(formData);//Using Service
         console.log("This is the result received from the backend:: ",result)
-        alert(result.message ||"Signed up Successfully")
+        setSnackbar({
+          open:true,
+          message:result.message||"Signed up Successfully",
+          severity:"success"
+        })
     }
     catch(err){
-        alert("Error Signing up")
+        setSnackbar({
+          open:true,
+          message:err||"Error Signing up!",
+          severity:"error"
+        })
     }
     console.log("Submitted:", formData);
   };
@@ -119,6 +137,13 @@ const SignupPage = () => {
           </MuiLink>
         </Typography>
       </Box>
+      {/* ✅ Snackbar Modular Component */}
+      <SnackBarAlert
+        open={snackbar.open}
+        message={snackbar.message}
+        severity={snackbar.severity}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+      />
     </Box>
   );
 };

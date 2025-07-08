@@ -1,5 +1,6 @@
 import SignupForm from "../components/auth/SignupForm";
 import {Box} from "@mui/material"
+// import SnackBarAlert from "../components/auth/SnackBarAlert";
 const SignupPage=()=>{
     return(
         <Box  sx={{ backgroundColor: "#f5f5f5", minHeight: "100vh", py: 8 }}>
