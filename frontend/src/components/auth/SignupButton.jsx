@@ -15,6 +15,7 @@ const SignupButton=()=>{
                     sx={{fontWeight:500,fontSize:"14px",cursor:"pointer"}}>
                         Sign up
                     </MuiLink>
+                    {/* We can use useNavigate also over here  */}
             </Typography>
         </Box>
     )

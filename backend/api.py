@@ -45,21 +45,19 @@ def login():
         if not formData:
             return jsonify({"error":"Invalid or Missing JSON"}),400
         email=formData.get("email")
-        password=formData.get("password")
+        password_fetched=formData.get("password")
         if debug_login:
             print(f"This is the formData received from the frontend::{formData}")
         email_presence=signup_db_object.find_users(users_collection,{"email":email})
-        customer_id_from_email=email_presence["_id"]
-        password_presence=None
-        customer_id_from_password=""
+        # customer_id_from_email=email_presence["_id"]
+        user_password_saved=""
         if debug_login:
             print(f"This is the email_presence::{email_presence} and type of the email_presence is::{type(email_presence)}")
         if email_presence :
-            password_presence=signup_db_object.find_users(users_collection,{"password":password})
-            customer_id_from_password=password_presence["_id"]
+            user_password_saved=email_presence["password"]
         else:
             return jsonify({"message":"User not registered. Please sign up first!!"}),404
-        if customer_id_from_password==customer_id_from_email:
+        if user_password_saved==password_fetched:
             return jsonify({"message": "Logged in successfully!"}), 200
         else:
             return jsonify({"message":'Incorrect Credentials'}),401
