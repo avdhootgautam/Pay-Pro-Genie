@@ -19,6 +19,15 @@ const PasswordField = (props) => {
               onClick={handleClickShowPassword}
               onMouseDown={handleMouseDownPassword}
               edge="end"
+              // backgroundcolor="#f5f5f5"
+              sx={{
+              backgroundColor: "black",
+              color: "#2196f3",
+              '&:hover': {
+                backgroundColor: "#e0e0e0",
+                color:"black"
+                  },
+                }}
             >
               {showPassword ? <VisibilityOff /> : <Visibility />}
             </IconButton>

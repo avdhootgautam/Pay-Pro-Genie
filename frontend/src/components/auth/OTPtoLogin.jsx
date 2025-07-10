@@ -4,7 +4,7 @@ import {Box} from "@mui/material"
 
     const OTPtoLogin=()=>{
     return(
-        <Box textAlign="center" mt={2}>
+        <Box textAlign="center" mt={2} >
         <MuiLink
         component={RouterLink}
         to="/otp-login"

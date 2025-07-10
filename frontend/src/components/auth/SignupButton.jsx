@@ -6,7 +6,7 @@ const SignupButton=()=>{
     return(
         <Box textAlign="center" mt={3}>
             <Typography
-            variant="body2" sx={{fontSize:"14px"}}>
+            variant="body2" sx={{fontSize:"14px"}} color="#f5f5f5">
                 Don't have an account?{" "}
                 <MuiLink
                     component={RouterLink}
