@@ -35,7 +35,7 @@ def sign_up():
         if user_presence:
             return jsonify({"message":"User Already exists"}),409
         signup_db_object.insert_users(users_collection,user_dict)
-        return jsonify({"message": "User registered successfully!"}),201
+        return jsonify({"message": "User registered successfully!"}),200
     except Exception as e:
         return jsonify({"error in signup":str(e)}),500
 @app.route("/api/login",methods=["POST"])

@@ -5,8 +5,10 @@ import OTPtoLogin from "./OTPtoLogin";
 import PasswordField from "./PasswordField";
 import SignupButton from "./SignupButton";
 import loginuser from "../../services/loginService";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
+  const navigate =useNavigate()
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -18,12 +20,13 @@ const LoginForm = () => {
       [e.target.name]: e.target.value,
     }));
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const result = await loginuser(formData);
-      alert(result.message || "Logged in Successfully");
+      if (result.message==="Logged in successfully!"){
+        navigate('/homepage');
+      }
     } catch (err) {
       alert("Error while logging in: " + err.message);
     }
