@@ -1,0 +1,19 @@
+.HomeFooter{
+    height:135px;
+    margin-top:25px;
+    background-color:#2f2f2f;
+    border-radius:0.5rem;
+    display:flex;
+    justify-content:space-between;
+}
+.HomeFooter .useful_legal_links{
+    padding-left:20px;
+    padding-top:40px;
+}
+.HomeFooter .useful_legal_links .legal_links {
+    padding-top:10px;
+}
+.HomeFooter .social_media_links{
+    margin-right:10px;
+    margin-top:30px;
+}

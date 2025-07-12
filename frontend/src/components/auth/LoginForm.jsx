@@ -25,7 +25,7 @@ const LoginForm = () => {
     try {
       const result = await loginuser(formData);
       if (result.message==="Logged in successfully!"){
-        navigate('/homepage');
+        navigate('/home');
       }
     } catch (err) {
       alert("Error while logging in: " + err.message);

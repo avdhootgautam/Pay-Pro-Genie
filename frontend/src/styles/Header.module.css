@@ -1,0 +1,23 @@
+.header{
+    height:80px;
+    background-color:#161616;
+    display:flex;
+    flex-direction:row;
+    justify-content:space-between;
+}
+.header .logo_with_title{
+    display:flex;
+    flex-direction:row;
+    margin-left:20px;
+    padding-top:15px;
+}
+.header .logo_with_title span{
+    padding-top:8px;
+}
+.header .navBar{
+    padding-top:15px;
+    padding-right:3px;
+}
+.header .navBar Button{
+    color:white;
+}
