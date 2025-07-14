@@ -1,0 +1,40 @@
+.dataset_upload_body{
+    background-color:#2f2f2f;
+    height:450px;
+    width:600px;
+    margin-left:350px;
+    border-radius:0.5rem;
+}
+.dataset_upload_body .upload_files{
+    height:170px;
+    width:570px;
+    background-color:#151515;
+    margin-left:15px;
+    margin-top:10px;
+}
+.dataset_upload_body .progress_1{
+    background-color:#151515;
+    height:50px;
+    margin-top:10px;
+    margin-left:10px;
+    margin-right:10px;
+    display:flex;
+    flex-direction:row;
+    justify-content:space-between;
+}
+.dataset_upload_body .progress_1 .progress_bar{
+    width:200px;
+    height:6px;
+    padding-top:20px;
+}
+.dataset_upload_body .progress_1 .FileName{
+    margin-left:20px;
+    padding-top:15px;
+    color:whitesmoke;
+}
+.dataset_upload_body .progress_1 .percentage_box{
+    padding-top:12px;
+    color:whitesmoke;
+    padding-right:10px;
+}
+
