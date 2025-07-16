@@ -1,6 +1,7 @@
 from flask import Flask,request,jsonify
 from flask_cors import CORS
 import os,sys
+from werkzeug.utils import secure_filename#This is used to extract the filename
 # Add the parent directory of `backend/` to sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 #Now we can import like this
@@ -63,6 +64,23 @@ def login():
             return jsonify({"message":'Incorrect Credentials'}),401
     except Exception as e:
         return jsonify({"error in login":str(e)}),500
+@app.route("/api/upload_dataset",methods=["POST"])
+def upload_dataset():
+    try:
+        print(f"In a upload dataset api.")
+        file=request.files.get("file");
+        #When you are fetching the files from the backend then use files
+        # print(f"This is the file:: {file}")
+        dataset_directory_path="./dataset"
+        if not os.path.exists(dataset_directory_path):
+            os.mkdir(dataset_directory_path)
+        filename_1=secure_filename(file.filename)
+        file.save(f"{dataset_directory_path}/{filename_1}")
+        if not file:
+            return jsonify({"message":"File does not received at the backend"}),404
+        return jsonify({"message":"File received at the backend"}),201
+    except Exception as e:
+        return jsonify({"message":"e"}),500
 
 if __name__=="__main__":
     app.run(debug=True)
