@@ -23,6 +23,7 @@ const DatasetUploadBody=()=>{
             formData.append("file",selected_file)
             const result=await upload_dataset(formData)
             alert("Got the result::"+result.message)
+
             }
             catch(err){
                 alert("Got the error:: "+err)
@@ -66,6 +67,11 @@ const DatasetUploadBody=()=>{
             }
             {/* <Box className={styles.progress_1}>
             </Box> */}
+            <Box className={styles.crud_buttons}>
+                <Button sx={{mt:"2rem",ml:15,backgroundColor:"#466e8c",color:"whitesmoke"}}>VIEW</Button>
+                <Button sx={{mt:"2rem",backgroundColor:"#466e8c",color:"whitesmoke"}}>DELETE</Button>
+                <Button sx={{mt:"2rem",mr:15,backgroundColor:"#466e8c",color:"whitesmoke"}}>SAVE</Button>
+            </Box>
         </Box>
     )
 }

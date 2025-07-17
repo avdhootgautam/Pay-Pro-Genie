@@ -37,4 +37,9 @@
     color:whitesmoke;
     padding-right:10px;
 }
+.dataset_upload_body .crud_buttons{
+    display:flex;
+    flex-direction:row;
+    justify-content:space-around;
+}
 
