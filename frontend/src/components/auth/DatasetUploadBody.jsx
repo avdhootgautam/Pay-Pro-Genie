@@ -68,9 +68,13 @@ const DatasetUploadBody=()=>{
             {/* <Box className={styles.progress_1}>
             </Box> */}
             <Box className={styles.crud_buttons}>
-                <Button sx={{mt:"2rem",ml:15,backgroundColor:"#466e8c",color:"whitesmoke"}}>VIEW</Button>
-                <Button sx={{mt:"2rem",backgroundColor:"#466e8c",color:"whitesmoke"}}>DELETE</Button>
-                <Button sx={{mt:"2rem",mr:15,backgroundColor:"#466e8c",color:"whitesmoke"}}>SAVE</Button>
+                <Button sx={{mt:"2rem",backgroundColor:"#466e8c",color:"whitesmoke"}}>VIEW</Button>
+                {uploading&&
+                <Box className={styles.delete_save_buttons}>
+                    <Button sx={{mt:"2rem",backgroundColor:"#466e8c",color:"whitesmoke"}}>DELETE</Button>
+                    <Button sx={{mt:"2rem",ml:1,backgroundColor:"#466e8c",color:"whitesmoke"}}>SAVE</Button>
+                </Box>
+                }
             </Box>
         </Box>
     )

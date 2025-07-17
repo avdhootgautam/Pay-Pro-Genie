@@ -40,6 +40,11 @@
 .dataset_upload_body .crud_buttons{
     display:flex;
     flex-direction:row;
-    justify-content:space-around;
+    justify-content:center;
+}
+.dataset_upload_body .crud_buttons .delete_save_buttons{
+    display:flex;
+    flex-direction:row;
+    margin-left:10px;
 }
 
