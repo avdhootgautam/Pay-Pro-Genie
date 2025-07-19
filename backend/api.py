@@ -52,14 +52,16 @@ def login():
         email_presence=signup_db_object.find_users(users_collection,{"email":email})
         # customer_id_from_email=email_presence["_id"]
         user_password_saved=""
+        user_fullName=""
         if debug_login:
             print(f"This is the email_presence::{email_presence} and type of the email_presence is::{type(email_presence)}")
         if email_presence :
             user_password_saved=email_presence["password"]
+            user_fullName=email_presence["fullName"]
         else:
             return jsonify({"message":"User not registered. Please sign up first!!"}),404
         if user_password_saved==password_fetched:
-            return jsonify({"message": "Logged in successfully!"}), 200
+            return jsonify({"message": "Logged in successfully!","email":email,"fullName":user_fullName}), 200
         else:
             return jsonify({"message":'Incorrect Credentials'}),401
     except Exception as e:
@@ -81,6 +83,16 @@ def upload_dataset():
         return jsonify({"message":"File received at the backend"}),201
     except Exception as e:
         return jsonify({"message":"e"}),500
-
+@app.route("/api/save-file",methods=["POST"])
+def save_file():
+    try:
+        userData=request.get_json()
+        # print(f"This is the formData received at the backend:: {formData}");
+        user_presence=signup_db_object.find_users(users_collection,{"email":userData["email"]})
+        print(f"This is for user is present or not:: {user_presence}")
+        object_id
+        return jsonify({"message":"file saved successfully!"}),201
+    except Exception as e:
+        return jsonify({"message":"doesn't received any formData"}),500
 if __name__=="__main__":
     app.run(debug=True)

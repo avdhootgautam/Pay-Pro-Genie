@@ -25,6 +25,10 @@ const LoginForm = () => {
     try {
       const result = await loginuser(formData);
       if (result.message==="Logged in successfully!"){
+        localStorage.setItem("email",result.email)
+        localStorage.setItem("fullName",result.fullName)
+        // alert("This is the email "+result.email)
+        // alert("This is the fullname "+result.fullName)
         navigate('/home');
       }
     } catch (err) {
