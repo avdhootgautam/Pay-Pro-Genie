@@ -11,9 +11,14 @@ class signup_mongo():
     def insert_users(self,users_collection,user_dict):
         users_collection.insert_one(user_dict)
         return 
-    def find_users(self,users_collection,email_dict):
-        user_presence=users_collection.find_one(email_dict)
+    def find_users(self,users_collection,dict):
+        user_presence=users_collection.find_one(dict)
         return user_presence
-    
+    def update_users(self,users_collection,dict):
+        users_collection.update_one(dict["id"],dict["set_csv_data"])
+        #dict should be of format given below
+        # {"_id": ObjectId(object_id)},
+        # {"$set": {"csv_data": csv_data}}
+
 if __name__=="__main__":
     object1=signup_mongo()

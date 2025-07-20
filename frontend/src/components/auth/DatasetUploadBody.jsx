@@ -24,9 +24,10 @@ const DatasetUploadBody=()=>{
             setProgress("100");
             const formData=new FormData();
             formData.append("file",selected_file)
+            const object_id_1=localStorage.getItem("object_id")
+            formData.append("object_id",object_id_1)
             const result=await upload_dataset(formData)
             alert("Got the result::"+result.message)
-
             }
             catch(err){
                 alert("Got the error:: "+err)
@@ -37,9 +38,10 @@ const DatasetUploadBody=()=>{
         let email=localStorage.getItem("email")
         // alert("This is the email got from the local storage:: "+email)
         let fullName=localStorage.getItem("fullName")
+        let object_id=localStorage.getItem("object_id")
         // alert("This is the fullName got from the local storage:: "+fullName)
         const data_from_local_storage={
-            "email":email,"fullName":fullName
+            "email":email,"fullName":fullName,"object_id":object_id
         }
         alert("This is the Data :: "+data_from_local_storage)
         try{

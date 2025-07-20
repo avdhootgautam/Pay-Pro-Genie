@@ -27,6 +27,8 @@ const LoginForm = () => {
       if (result.message==="Logged in successfully!"){
         localStorage.setItem("email",result.email)
         localStorage.setItem("fullName",result.fullName)
+        localStorage.setItem("object_id",result.object_id)
+        alert("This is the object_id:: "+result.object_id)
         // alert("This is the email "+result.email)
         // alert("This is the fullname "+result.fullName)
         navigate('/home');
