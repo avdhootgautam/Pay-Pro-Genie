@@ -11,7 +11,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from database.signup_mongo import signup_mongo
 config=read_config()
 debug_signup=False
-debug_login=True
+debug_login=False
 app=Flask(__name__)
 CORS(app)
 signup_db_object=signup_mongo();
@@ -64,7 +64,7 @@ def login():
             user_password_saved=email_presence["password"]
             user_fullName=email_presence["fullName"]
             object_id=str(email_presence["_id"])
-            print(f"This is the object id::{object_id}")
+            # print(f"This is the object id::{object_id}")
         else:
             return jsonify({"message":"User not registered. Please sign up first!!"}),404
         if user_password_saved==password_fetched:
@@ -102,21 +102,38 @@ def upload_dataset():
 def save_file():
     try:
         userData=request.get_json()
-        print(f"This is the formData received at the backend:: {userData}");
-        print(f"This is the object is before type change::{userData["object_id"]}")
+        # print(f"This is the formData received at the backend:: {userData}");
+        # print(f"This is the object is before type change::{userData["object_id"]}")
         object_id=userData["object_id"]
         user_presence=signup_db_object.find_users(users_collection,{"_id": ObjectId(object_id)})
         # print(f'This is the user_presesnce::{user_presence}')
-        # print(f"This is the object is before type change::{userData["object_id"]}")
-        # print(f"This is the object id:: {ObjectId(userData["object_id"])}")
-        # print(f"This is for user is present or not:: {user_presence}")
+        # # print(f"This is the object is before type change::{userData["object_id"]}")
+        # # print(f"This is the object id:: {ObjectId(userData["object_id"])}")
+        # # print(f"This is for user is present or not:: {user_presence}")
+        # if user_presence:
+        #     train_csv_file_path=config["dataset"]["train_dataset_path"]
+        #     # print(f"This is the csv file_path for trining:: {train_csv_file_path}")
+        #     csv_data=pd.read_csv(train_csv_file_path).to_dict(orient="records")
+        #     # print(f"This is the csv data ::{csv_data}")
+        #     dict_to_be_updated={"id":{"_id": ObjectId(object_id)},"set_csv_data":{"$set": {"csv_data": csv_data}}}
+        #     signup_db_object.update_users(users_collection,dict_to_be_updated)
         if user_presence:
-            train_csv_file_path=config["dataset"]["train_dataset_path"]
-            # print(f"This is the csv file_path for trining:: {train_csv_file_path}")
-            csv_data=pd.read_csv(train_csv_file_path).to_dict(orient="records")
-            # print(f"This is the csv data ::{csv_data}")
-            dict_to_be_updated={"id":{"_id": ObjectId(object_id)},"set_csv_data":{"$set": {"csv_data": csv_data}}}
-            signup_db_object.update_users(users_collection,dict_to_be_updated)
+            path_for_saving_the_data=os.path.join("./dataset",object_id)
+            if not os.path.exists(path_for_saving_the_data):
+                return jsonify({"message":"Path for saving teh dataset doesn't exist"}),404
+            print(f"This is the path for saving the dataset:: {path_for_saving_the_data}")
+            for root,dirs,files in os.walk(path_for_saving_the_data):
+                    for file in files:
+                        print(f"This is the file :: {file}")
+                        full_path_for_saving_the_file=os.path.join(path_for_saving_the_data,file)
+                        csv_data=pd.read_csv(full_path_for_saving_the_file).to_dict(orient="records")
+                        # print(f"This is the csv data:: {csv_data}")
+                        filename_without_extension = file.rsplit(".", 1)[0]
+                        print(f"This is the name of the file::{filename_without_extension} and the type is ::{type(filename_without_extension)}")
+                        dict_to_be_updated={"id":{"_id": ObjectId(object_id)},"set_csv_data":{"$set": {filename_without_extension: csv_data}}}
+                        result=signup_db_object.update_users(users_collection,dict_to_be_updated)
+                        print(f"This is the result:: {result}")
+
         return jsonify({"message":"file saved successfully!"}),201
     except Exception as e:
         return jsonify({"message":"doesn't received any formData"}),500
