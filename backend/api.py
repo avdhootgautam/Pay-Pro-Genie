@@ -107,16 +107,9 @@ def save_file():
         object_id=userData["object_id"]
         user_presence=signup_db_object.find_users(users_collection,{"_id": ObjectId(object_id)})
         # print(f'This is the user_presesnce::{user_presence}')
-        # # print(f"This is the object is before type change::{userData["object_id"]}")
-        # # print(f"This is the object id:: {ObjectId(userData["object_id"])}")
-        # # print(f"This is for user is present or not:: {user_presence}")
-        # if user_presence:
-        #     train_csv_file_path=config["dataset"]["train_dataset_path"]
-        #     # print(f"This is the csv file_path for trining:: {train_csv_file_path}")
-        #     csv_data=pd.read_csv(train_csv_file_path).to_dict(orient="records")
-        #     # print(f"This is the csv data ::{csv_data}")
-        #     dict_to_be_updated={"id":{"_id": ObjectId(object_id)},"set_csv_data":{"$set": {"csv_data": csv_data}}}
-        #     signup_db_object.update_users(users_collection,dict_to_be_updated)
+        # print(f"This is the object is before type change::{userData["object_id"]}")
+        # print(f"This is the object id:: {ObjectId(userData["object_id"])}")
+        # print(f"This is for user is present or not:: {user_presence}")
         if user_presence:
             path_for_saving_the_data=os.path.join("./dataset",object_id)
             if not os.path.exists(path_for_saving_the_data):
@@ -133,7 +126,6 @@ def save_file():
                         dict_to_be_updated={"id":{"_id": ObjectId(object_id)},"set_csv_data":{"$set": {filename_without_extension: csv_data}}}
                         result=signup_db_object.update_users(users_collection,dict_to_be_updated)
                         print(f"This is the result:: {result}")
-
         return jsonify({"message":"file saved successfully!"}),201
     except Exception as e:
         return jsonify({"message":"doesn't received any formData"}),500
