@@ -4,7 +4,10 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useState,useEffect } from "react";
 import upload_dataset from "../../services/uploadDatasetService";
 import save_file_from_backend from "../../services/saveFileFromBackend"
+import { useNavigate } from "react-router-dom";
+
 const DatasetUploadBody=()=>{
+    const Navigate=useNavigate()
     const [file,setFile]=useState(null);
     const[uploading,setUploading]=useState(false);
     const [progress,setProgress]=useState(0);
@@ -56,6 +59,9 @@ const DatasetUploadBody=()=>{
             alert("Error in saving the file:: "+err)
         }
     }
+    const viewFile=()=>{
+        Navigate('/view-page')
+    }
     return(
         <Box className={styles.dataset_upload_body}>
             <Typography sx={{color:"whitesmoke",fontFamily:"Poppins",fontSize:"1.25rem",mt:"10px",ml:"15px",paddingTop:"10px;"}}>Upload Your Dataset</Typography>
@@ -95,7 +101,7 @@ const DatasetUploadBody=()=>{
             {/* <Box className={styles.progress_1}>
             </Box> */}
             <Box className={styles.crud_buttons}>
-                <Button sx={{mt:"2rem",backgroundColor:"#466e8c",color:"whitesmoke"}}>VIEW </Button>
+                <Button sx={{mt:"2rem",backgroundColor:"#466e8c",color:"whitesmoke"}} onClick={viewFile}>VIEW </Button>
                 {uploading&&
                 <Box className={styles.delete_save_buttons}>
                     <Button sx={{mt:"2rem",backgroundColor:"#466e8c",color:"whitesmoke"}}>DELETE</Button>
