@@ -1,0 +1,19 @@
+.ViewPageBody .ViewPageFirstSection .ViewPageFirstSectionFirstSubSection {
+    display:flex;
+    flex-direction:row;
+    margin-top:10px;
+}
+.ViewPageBody .ViewPageFirstSection .ViewPageFirstSectionFirstSubSection .title .details_of_file{
+    width:260px;
+    display:flex;
+    flex-direction:row;
+    justify-content:space-between;
+    margin-top:5px;
+}
+.ViewPageBody .ViewPageFirstSection .ViewPageFirstSectionFirstSubSection .title .details_of_file .filename{
+    height:20px;
+    width:80px;
+    border: 0.5px solid whitesmoke;
+    border-radius: 8px;
+    padding-top:2px;
+}
