@@ -1,19 +1,57 @@
+.ViewPageBody .ViewPageFirstSection {
+    display:flex;
+    flex-direction:row;
+    justify-content:space-between;
+}
+
 .ViewPageBody .ViewPageFirstSection .ViewPageFirstSectionFirstSubSection {
     display:flex;
     flex-direction:row;
     margin-top:10px;
 }
+
 .ViewPageBody .ViewPageFirstSection .ViewPageFirstSectionFirstSubSection .title .details_of_file{
     width:260px;
     display:flex;
     flex-direction:row;
-    justify-content:space-between;
+    justify-content:space-around;
     margin-top:5px;
 }
+
 .ViewPageBody .ViewPageFirstSection .ViewPageFirstSectionFirstSubSection .title .details_of_file .filename{
     height:20px;
-    width:80px;
+    width:120px;
     border: 0.5px solid whitesmoke;
     border-radius: 8px;
     padding-top:2px;
+}
+
+.ViewPageBody .ViewPageFirstSection .ViewPageFirstSectionSecondSubSection{
+    display:flex;
+    flex-direction:row;
+    margin-top:10px;
+    margin-right:50px;
+}
+.ViewPageBody .ViewPageFirstSection .ViewPageFirstSectionSecondSubSection .Reload{
+    height:20px;
+    width:60px;
+    margin-top:2px;
+}
+
+
+.ViewPageBody .ViewPageFirstSection .ViewPageFirstSectionSecondSubSection .Reload Button img{
+    width:20px;
+    height:20px;
+}
+
+.ViewPageBody .ViewPageFirstSection .ViewPageFirstSectionSecondSubSection .Download {
+    width:100px;
+    margin-top:2px;
+}
+
+
+.ViewPageBody .ViewPageFirstSection .ViewPageFirstSectionSecondSubSection .Download Button img{
+    width:20px;
+    height:20px;
+    margin-right:10px;
 }
