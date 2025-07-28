@@ -4,7 +4,9 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from "react-router-dom";
 import DatasetUploadPage from "../../pages/DatasetUploadPage";
 import file_icon from "../../assets/file_icon.png"
-import { blueGrey } from "@mui/material/colors";
+import reload_icon from "../../assets/reload_icon_1.png"
+import download_icon from "../../assets/download_icon_3.png"
+import ViewPageTable  from "./ViewPageTable";
 const ViewPageBody=()=>{
     const Navigate=useNavigate();
     const NavigateToDatasetUploadPage=()=>{
@@ -44,7 +46,22 @@ const ViewPageBody=()=>{
                         </Box>
                     </Box>
                 </Box>
-                <Box className={styles.ViewPageFirstSectionSecondSubSection}></Box>
+                <Box className={styles.ViewPageFirstSectionSecondSubSection}>
+                    <Box className={styles.Reload}>
+                        <Button>
+                            <img src={reload_icon} alt="Reload Button" />
+                        </Button>
+                    </Box>
+                    <Box className={styles.Download}>
+                        <Button >
+                            <img src={download_icon} alt="Download Button"/>
+                            <Typography sx={{fontFamily:"Georgia",fontSize:"14px" ,color:"whitesmoke"}}>Download</Typography>
+                        </Button>
+                    </Box>
+                </Box>
+            </Box>
+            <Box className={styles.SecondSection}>
+                <ViewPageTable/>
             </Box>
         </Box>
     )
