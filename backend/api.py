@@ -4,23 +4,27 @@ import os,sys
 from werkzeug.utils import secure_filename#This is used to extract the filename
 from bson import ObjectId#This is used to convert the string into ObjectId
 import pandas as pd
-from utils import read_config
+from utils import read_config,custom_logger
 # Add the parent directory of `backend/` to sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 #Now we can import like this
 from database.signup_mongo import signup_mongo
 config=read_config()
+logger=custom_logger()
 debug_signup=False
 debug_login=False
+logger.info(f"IN A API FILE")
 app=Flask(__name__)
 CORS(app)
-signup_db_object=signup_mongo();
+signup_db_object=signup_mongo()
 users_collection=signup_db_object.create_db_connection("signup_db","users")
 @app.route("/api/signup",methods=["POST"])
 def sign_up():
     try:
         formData=request.get_json()
+        logger.info(f"Form data received is :: {formData}")
         if not formData:
+            logger.error(f"Didn't received the formData")
             return jsonify({"error":"Invalid or Missing JSON"}),400
         if debug_signup:
             print(f"This is the formdata received from the frontend:: {formData}")

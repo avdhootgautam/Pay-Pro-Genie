@@ -2,3 +2,4 @@ flask
 flask_cors
 pyyaml
 pandas
+colorlog
