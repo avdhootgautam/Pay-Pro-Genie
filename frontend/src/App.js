@@ -5,6 +5,8 @@ import WelcomePage from "./pages/WelcomePage";
 import HomePage from "./pages/HomePage";
 import DatasetUploadPage from "./pages/DatasetUploadPage";
 import ViewPage from "./pages/ViewPage";
+// import ViewFileCard from "./pages/ViewFileCard";
+import ResultPage from "./pages/ResultPage"
 function App() {
   // console.log("Heloo World!")
   return (
@@ -15,6 +17,7 @@ function App() {
         <Route path="/signup" element={<SignupPage/>}/>
         <Route path="/home" element={<HomePage/>}/>
         <Route path="/upload-dataset" element={<DatasetUploadPage/>}/>
+        <Route path="/result" element={<ResultPage/>}/>
         <Route path="/view-page" element={<ViewPage/>}/>
       </Routes>
     </BrowserRouter>

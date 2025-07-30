@@ -59,8 +59,8 @@ const DatasetUploadBody=()=>{
             alert("Error in saving the file:: "+err)
         }
     }
-    const viewFile=()=>{
-        Navigate('/view-page')
+    const resultPage=()=>{
+        Navigate("/result")
     }
     return(
         <Box className={styles.dataset_upload_body}>
@@ -101,7 +101,7 @@ const DatasetUploadBody=()=>{
             {/* <Box className={styles.progress_1}>
             </Box> */}
             <Box className={styles.crud_buttons}>
-                <Button sx={{mt:"2rem",backgroundColor:"#466e8c",color:"whitesmoke"}} onClick={viewFile}>VIEW </Button>
+                <Button sx={{mt:"2rem",backgroundColor:"#466e8c",color:"whitesmoke"}} onClick={resultPage}>VIEW </Button>
                 {uploading&&
                 <Box className={styles.delete_save_buttons}>
                     <Button sx={{mt:"2rem",backgroundColor:"#466e8c",color:"whitesmoke"}}>DELETE</Button>
