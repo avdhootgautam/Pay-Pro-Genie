@@ -4,18 +4,25 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useState,useEffect } from "react";
 import upload_dataset from "../../services/uploadDatasetService";
 import save_file_from_backend from "../../services/saveFileFromBackend"
+import check_file_exists from "../../services/checkFileExistsService";
 import { useNavigate } from "react-router-dom";
 
 const DatasetUploadBody=()=>{
+
     const Navigate=useNavigate()
     const [file,setFile]=useState(null);
     const[uploading,setUploading]=useState(false);
     const [progress,setProgress]=useState(0);
-    // user_email=localStorage.getItem("email")
 
-    // const handleFileChange=(e)=>{
-    //     setFile(e.target.files[0]);
-    // }
+    //Here i will declare the useStae for the localStorage itme as it will be use throught every function
+    const [email,setEmail]=useState("")
+    const [fullName,setFullName]=useState("")
+    const [object_id,setObject_id]=useState("")
+    useEffect(()=>{
+        setEmail(localStorage.getItem("email")|| "");
+        setFullName(localStorage.getItem("fullName")||"")
+        setObject_id(localStorage.getItem("object_id")||"")
+    },[])
     const handleFileChange=async(e)=>{
         e.preventDefault();
         try{
@@ -27,8 +34,8 @@ const DatasetUploadBody=()=>{
             setProgress("100");
             const formData=new FormData();
             formData.append("file",selected_file)
-            const object_id_1=localStorage.getItem("object_id")
-            formData.append("object_id",object_id_1)
+            // const object_id_1=localStorage.getItem("object_id")
+            formData.append("object_id",object_id)
             const result=await upload_dataset(formData)
             alert("Got the result::"+result.message)
             }
@@ -36,12 +43,14 @@ const DatasetUploadBody=()=>{
                 alert("Got the error:: "+err)
             }
     };
+
+
     const saveFile=async(e)=>{
         e.preventDefault();
-        let email=localStorage.getItem("email")
-        // alert("This is the email got from the local storage:: "+email)
-        let fullName=localStorage.getItem("fullName")
-        let object_id=localStorage.getItem("object_id")
+        // let email=localStorage.getItem("email")
+        // // alert("This is the email got from the local storage:: "+email)
+        // let fullName=localStorage.getItem("fullName")
+        // let object_id=localStorage.getItem("object_id")
         // alert("This is the fullName got from the local storage:: "+fullName)
         const data_from_local_storage={
             "email":email,"fullName":fullName,"object_id":object_id
@@ -59,9 +68,28 @@ const DatasetUploadBody=()=>{
             alert("Error in saving the file:: "+err)
         }
     }
-    const resultPage=()=>{
-        Navigate("/result")
+
+    //Here i will write one api to hit the backend for checking whether any file exists in a databse or not
+    const resultPage=async(e)=>{
+        e.preventDefault();
+        const data_from_local_storage={
+            "email":email,"fullName":fullName,"object_id":object_id
+        }
+        try{
+            const response =await check_file_exists(data_from_local_storage)
+            if (response.message==="File Exist"){
+                Navigate("/result")
+            }
+            else{
+                alert("No file has been uploaded yet!!")
+            }
+        }catch(err){
+            alert("Error in check_file_exists")
+        }
     }
+
+
+
     return(
         <Box className={styles.dataset_upload_body}>
             <Typography sx={{color:"whitesmoke",fontFamily:"Poppins",fontSize:"1.25rem",mt:"10px",ml:"15px",paddingTop:"10px;"}}>Upload Your Dataset</Typography>
