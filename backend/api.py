@@ -4,20 +4,27 @@ import os,sys
 from werkzeug.utils import secure_filename#This is used to extract the filename
 from bson import ObjectId#This is used to convert the string into ObjectId
 import pandas as pd
-from utils import read_config,custom_logger
+from utils import read_config,custom_logger,extract_file_information
 # Add the parent directory of `backend/` to sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 #Now we can import like this
 from database.signup_mongo import signup_mongo
+from collections import defaultdict
+
 config=read_config()
 logger=custom_logger()
+
 debug_signup=False
 debug_login=False
+
 logger.info(f"IN A API FILE")
 app=Flask(__name__)
 CORS(app)
-signup_db_object=signup_mongo()
+
+signup_db_object=signup_mongo()#dclared a database
 users_collection=signup_db_object.create_db_connection("signup_db","users")
+
+
 @app.route("/api/signup",methods=["POST"])
 def sign_up():
     try:
@@ -47,6 +54,8 @@ def sign_up():
         return jsonify({"message": "User registered successfully!"}),200
     except Exception as e:
         return jsonify({"error in signup":str(e)}),500
+
+
 @app.route("/api/login",methods=["POST"])
 def login():
     try:
@@ -78,30 +87,43 @@ def login():
             return jsonify({"message":'Incorrect Credentials'}),401
     except Exception as e:
         return jsonify({"error in login":str(e)}),500
+
+
 @app.route("/api/upload_dataset",methods=["POST"])
 def upload_dataset():
     try:
         print(f"In a upload dataset api.")
-        file=request.files.get("file");
+        file=request.files.get("file")
         object_id=request.form.get("object_id")
+
         #When you are fetching the files from the backend then use files
         print(f"This is the file:: {file}")
         print(f"This is the obejct is received from the data:: {object_id} and the type of the data is ::{type(object_id)}")
         dataset_directory_path="./dataset"
-        # if not os.path.exists(dataset_directory_path):
-        #     os.mkdir(dataset_directory_path)
+
         path_for_saving_file=os.path.join(dataset_directory_path,object_id)
         if not os.path.exists(path_for_saving_file):
             os.makedirs(path_for_saving_file)
         filename_1=secure_filename(file.filename)
         full_save_path=os.path.join(path_for_saving_file,filename_1)
+
         #Actually file.save works differently as the path should already be created before putting the file in it
         file.save(full_save_path)
+
+        #Here i will update the element in a database for a particular object_id
+        user_exist=signup_db_object.find_users(users_collection,{"_id": ObjectId(object_id)})
+        if user_exist:
+             dict_to_be_updated={"id":{"_id": ObjectId(object_id)},"set_csv_data":{"$set": {"files": []}}}
+             result=signup_db_object.update_users(users_collection,dict_to_be_updated)
+             logger.info(f'This is the result after updation:: {result}')
+
         if not file:
             return jsonify({"message":"File does not received at the backend"}),404
         return jsonify({"message":"File received at the backend"}),201
     except Exception as e:
         return jsonify({"message":e}),500
+    
+
 @app.route("/api/save-file",methods=["POST"])
 def save_file():
     try:
@@ -117,21 +139,89 @@ def save_file():
         if user_presence:
             path_for_saving_the_data=os.path.join("./dataset",object_id)
             if not os.path.exists(path_for_saving_the_data):
-                return jsonify({"message":"Path for saving teh dataset doesn't exist"}),404
+                return jsonify({"message":"Path for saving the dataset doesn't exist"}),404
             print(f"This is the path for saving the dataset:: {path_for_saving_the_data}")
             for root,dirs,files in os.walk(path_for_saving_the_data):
                     for file in files:
-                        print(f"This is the file :: {file}")
+                        logger.info(f"This is the file :: {file}")
                         full_path_for_saving_the_file=os.path.join(path_for_saving_the_data,file)
-                        csv_data=pd.read_csv(full_path_for_saving_the_file).to_dict(orient="records")
-                        # print(f"This is the csv data:: {csv_data}")
-                        filename_without_extension = file.rsplit(".", 1)[0]
-                        print(f"This is the name of the file::{filename_without_extension} and the type is ::{type(filename_without_extension)}")
-                        dict_to_be_updated={"id":{"_id": ObjectId(object_id)},"set_csv_data":{"$set": {filename_without_extension: csv_data}}}
+
+                        #Extacting the file information
+                        file_info=extract_file_information(full_path_for_saving_the_file)
+                        file_info["file_name"]=file
+                        logger.info(f"This is the file_info {file_info} for a file {file}")
+
+                        csv_data=pd.read_csv(full_path_for_saving_the_file)#Here i read the data using pd
+                        csv_data=csv_data.to_dict(orient="records")#Here i converted the data into records so that i can store it into a database
+                       
+                       
+                        # If you want to update in a existing element then always use {$push}
+                        dict_to_be_updated={"id":{"_id": ObjectId(object_id)},"set_csv_data":{"$push": {"files": {
+                            "fileInfo": file_info,
+                            "data": csv_data
+                        }}}}
+
                         result=signup_db_object.update_users(users_collection,dict_to_be_updated)
                         print(f"This is the result:: {result}")
+
         return jsonify({"message":"file saved successfully!"}),201
     except Exception as e:
         return jsonify({"message":"doesn't received any formData"}),500
+    
+
+@app.route("/api/check-uploaded-file-exists",methods=['POST'])
+def check_uploaded_file_exists():
+    logger.info(f'IN A CHECK UPLOAD FILE EXIST')
+    try:
+        userData=request.get_json()
+        logger.debug(f"This is the userData received from the frontend:: {userData}")
+
+        #Now here i have written the query 
+        #"$exists" =>This is used to check whether the files exists or not then after it will check for the files using "$not": { "$size": 0 }
+        query = {
+        "_id": ObjectId(userData["object_id"]),
+        "files": {
+            "$exists": True,
+            "$not": { "$size": 0 }
+        }
+    }
+        
+        result=signup_db_object.find_users(users_collection,query)
+        # logger.info(f'This is the result i have got for checking whether the file exist or not :{result}')
+        if result:
+            return jsonify({"message":"File Exist"}),201
+        else :
+            return jsonify({"message":"No files uploaded"}),201
+    except Exception as e:
+        logger.error(f"Error in a check_uploaded_file_exists:: {e}")
+        return jsonify({"message":"Failed in checking whether the file exist or not"}),500
+
+@app.route("/api/fetch_details_of_a_file",methods=["POST"])
+def fetch_the_details_of_the_files():
+    logger.info(f"IN A FETCH DETAILS OF A FILE")
+    try:
+        userData=request.get_json()
+        logger.info(f"This is the data fetched from the frontend:: {userData}")
+        user_presence=signup_db_object.find_users(users_collection,{"_id": ObjectId(userData["object_id"])})
+
+        file_info=defaultdict(dict)
+        if user_presence:
+            logger.info(f"Type of the user_presence is:: {type(user_presence)} and the size of th dict is {len(user_presence)}")
+            for key,value in user_presence.items():
+                if key=="files":
+                    logger.info(f"This is the files :: {len(value) } and the type of the value is {type(value)}")
+                    index=0
+                    for element in value:
+                        # file_info.add(element['fileInfo'])
+                        logger.info(f"This is the fileInfo for an element:: {element.get("fileInfo")}")
+                        file_info[index]=element.get("fileInfo")
+                        index+=1
+        
+        logger.info(f"This is the file_info for all the files stored in a databse for a particular user:; {file_info}")
+        return jsonify({"message":"Successfully fetched the details of a file","data":file_info}),201
+    except Exception as e:
+        logger.error(f"Error in fetching the details of a file:: {e}")
+        return jsonify({"message":f"Error in fetching the details of a file {e}"}),500
+
 if __name__=="__main__":
     app.run(debug=True)
