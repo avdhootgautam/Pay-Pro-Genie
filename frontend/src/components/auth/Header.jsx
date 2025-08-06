@@ -10,10 +10,12 @@ const Header=()=>{
     const handleOpen=()=>setOpen(true);
     const handleClose=()=>setOpen(false);
     const handleHomeButton=()=>{
-        Navigate('/home');
+        Navigate('/home', { replace: true });
     }
-    const handleDatasetUploadButton=()=>{
-        Navigate('/upload-dataset')
+    const handleDatasetUploadButton=(e)=>{
+        e.preventDefault()
+        //here { replace: true } is preventing in stacking the browser with same link .
+        Navigate('/upload-dataset', { replace: true })
     }
     return(
         <Box className={styles.header}>
