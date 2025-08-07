@@ -1,7 +1,7 @@
 import styles from "../../styles/Header.module.css";
 import {Box, Button} from "@mui/material"
 import logo from "../../assets/logo.png"
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation } from "react-router-dom";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Typography } from "@mui/material";
 import { useState } from "react";
 const Header=()=>{
@@ -9,13 +9,17 @@ const Header=()=>{
     const [open,setOpen]=useState(false);
     const handleOpen=()=>setOpen(true);
     const handleClose=()=>setOpen(false);
+    const location=useLocation();
     const handleHomeButton=()=>{
-        Navigate('/home', { replace: true });
+        if(location.pathname!="/home")
+        {Navigate('/home', { replace: true });}
     }
     const handleDatasetUploadButton=(e)=>{
         e.preventDefault()
         //here { replace: true } is preventing in stacking the browser with same link .
-        Navigate('/upload-dataset', { replace: true })
+        if(location.pathname!="/upload-dataset")
+        {Navigate('/upload-dataset', { replace: true })}
+        //Use of useLocation => This replaces the current entry in history ,preventing it from stacking up like:-/home → /upload_dataset → /home → /upload_dataset → /home...
     }
     return(
         <Box className={styles.header}>
