@@ -5,7 +5,7 @@ import { useState,useEffect } from "react";
 import upload_dataset from "../../services/uploadDatasetService";
 import save_file_from_backend from "../../services/saveFileFromBackend"
 import check_file_exists from "../../services/checkFileExistsService";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const DatasetUploadBody=()=>{
 
@@ -18,6 +18,7 @@ const DatasetUploadBody=()=>{
     const [email,setEmail]=useState("")
     const [fullName,setFullName]=useState("")
     const [object_id,setObject_id]=useState("")
+    const location=useLocation()
     useEffect(()=>{
         setEmail(localStorage.getItem("email")|| "");
         setFullName(localStorage.getItem("fullName")||"")
@@ -78,7 +79,8 @@ const DatasetUploadBody=()=>{
         try{
             const response =await check_file_exists(data_from_local_storage)
             if (response.message==="File Exist"){
-                Navigate("/result")
+                if(location.pathname!="/result")
+               { Navigate("/result",{ replace: true })}
             }
             else{
                 alert("No file has been uploaded yet!!")
