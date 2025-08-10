@@ -2,6 +2,7 @@ import yaml
 import logging
 import colorlog
 import os
+import pandas as pd
 def read_config():
     with open("./config_backend.yaml","r") as file:
         config=yaml.safe_load(file)
@@ -33,3 +34,23 @@ def custom_logger():
         logger.addHandler(file_handler)
         logger.addHandler(console_handler)
     return logger 
+
+logger=custom_logger()
+
+def extract_file_information(csv_file_path):
+    file_info={}
+
+    file_size=os.path.getsize(csv_file_path)#Determine the file size of the csv file
+    file_info["file_size"]=f"{file_size/(1024*1024):0.2f}MB"
+    logger.info(f"This is the file size:{file_size}")
+
+    df=pd.read_csv(csv_file_path)
+    number_of_columns=df.shape[1]#Calcualting the number of columns
+    file_info["number_of_columns"]=number_of_columns
+    logger.info(f"This is the number_of_columns:{number_of_columns}")
+
+    number_of_rows=df.shape[0]#Calculating the number of rows
+    file_info["number_of_rows"]=number_of_rows
+    logger.info(f"This is the number_of_rows:: {number_of_rows}")
+
+    return file_info
