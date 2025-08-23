@@ -2,7 +2,8 @@ import { Typography,Box ,Button} from "@mui/material";
 import styles from "../../styles/HomeBody.module.css";
 import image_preprocessing_logo from "../../assets/image_preprocessing_logo.png"
 import numerical_preprocessing_logo from "../../assets/numerical_preprocessing_logo.png";
-import text_preprocessing_logo from "../../assets/text_preprocessing_logo.png"
+import text_preprocessing_logo from "../../assets/text_preprocessing_logo.png";
+
 const HomeBody=()=>{
     return (
     <Box className={styles.HomeBodyContainer}>

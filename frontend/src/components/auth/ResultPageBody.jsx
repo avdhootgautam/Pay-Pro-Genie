@@ -1,8 +1,9 @@
-import {Box} from "@mui/material"
+import {Box, useColorScheme} from "@mui/material"
 import styles from "../../styles/ResultPageBody.module.css"
-import {useState,useEffect} from "react"
+import {useState,useEffect, useContext} from "react"
 import fetch_details_of_file from "../../services/fetch_details_of_file_service"
 import FileCard from "./FileCard"
+import { UserContext } from "./UserContext"
 const ResultPageBody=()=>{
     // const [fileName,setFilename]=useState("")
     // const [rowCount,setrowCount]=useState(0)
@@ -14,12 +15,12 @@ const ResultPageBody=()=>{
     const [email,setEmail]=useState("")
     const [object_id,setObject_id]=useState("")
     const [fullName,setFullName]=useState("")
-
+    const {user}=useContext(UserContext)
     
     useEffect(()=>{
-        const localemail=localStorage.getItem("email")||"";
-        const localobejct_id=localStorage.getItem("object_id")||""
-        const localfullName=localStorage.getItem("fullName")||"";
+        const localemail=user.email||"";
+        const localobejct_id=user.object_id||""
+        const localfullName=user.fullName||"";
 
         setEmail(localemail);
         setObject_id(localobejct_id);

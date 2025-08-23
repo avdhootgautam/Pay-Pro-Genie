@@ -1,15 +1,18 @@
 import {Box, Typography,Button,LinearProgress} from "@mui/material";
 import styles from "../../styles/DatasetUploadBody.module.css";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { useState,useEffect } from "react";
+import { useState,useEffect ,useContext} from "react";
 import upload_dataset from "../../services/uploadDatasetService";
 import save_file_from_backend from "../../services/saveFileFromBackend"
 import check_file_exists from "../../services/checkFileExistsService";
-import { useLocation, useNavigate } from "react-router-dom";
+import { replace, useLocation, useNavigate } from "react-router-dom";
+import { UserContext } from "./UserContext";
 
 const DatasetUploadBody=()=>{
 
     const Navigate=useNavigate()
+    const {user}=useContext(UserContext)
+
     const [file,setFile]=useState(null);
     const[uploading,setUploading]=useState(false);
     const [progress,setProgress]=useState(0);
@@ -19,11 +22,14 @@ const DatasetUploadBody=()=>{
     const [fullName,setFullName]=useState("")
     const [object_id,setObject_id]=useState("")
     const location=useLocation()
+    
     useEffect(()=>{
-        setEmail(localStorage.getItem("email")|| "");
-        setFullName(localStorage.getItem("fullName")||"")
-        setObject_id(localStorage.getItem("object_id")||"")
+        // console.log(user.email+" "+user.fullName+" "+user.object_id)
+        setEmail(user.email|| "");
+        setFullName(user.fullName||"")
+        setObject_id(user.object_id||"")
     },[])
+
     const handleFileChange=async(e)=>{
         e.preventDefault();
         try{
@@ -89,8 +95,6 @@ const DatasetUploadBody=()=>{
             alert("Error in check_file_exists")
         }
     }
-
-
 
     return(
         <Box className={styles.dataset_upload_body}>
