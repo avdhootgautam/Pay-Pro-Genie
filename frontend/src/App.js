@@ -5,6 +5,7 @@ import WelcomePage from "./pages/WelcomePage";
 import HomePage from "./pages/HomePage";
 import DatasetUploadPage from "./pages/DatasetUploadPage";
 import ViewPage from "./pages/ViewPage";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 // import ViewFileCard from "./pages/ViewFileCard";
 import ResultPage from "./pages/ResultPage"
 function App() {
@@ -12,10 +13,16 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<WelcomePage/>}/>
+        {/* PUBlIC ROUTES */}
         <Route path="/login" element={<LoginPage/>}/>
         <Route path="/signup" element={<SignupPage/>}/>
-        <Route path="/home" element={<HomePage/>}/>
+
+        {/* PROTECTED ROUTES */}
+        <Route path="/home" element={
+          <ProtectedRoute>
+          <HomePage/>
+          </ProtectedRoute>
+        }/>
         <Route path="/upload-dataset" element={<DatasetUploadPage/>}/>
         <Route path="/result" element={<ResultPage/>}/>
         <Route path="/view-page" element={<ViewPage/>}/>
