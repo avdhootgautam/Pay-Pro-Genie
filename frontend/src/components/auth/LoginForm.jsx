@@ -6,11 +6,11 @@ import PasswordField from "./PasswordField";
 import SignupButton from "./SignupButton";
 import loginuser from "../../services/loginService";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "./UserContext";
+// import { UserContext } from "./UserContext";
 
 const LoginForm = () => {
   const navigate =useNavigate()
-  const {user,setUser}=useContext(UserContext);
+  // const {user,setUser}=useContext(UserContext);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -30,15 +30,15 @@ const LoginForm = () => {
         // localStorage.setItem("email",result.email)
         // localStorage.setItem("fullName",result.fullName)
         // localStorage.setItem("object_id",result.object_id)
-        setUser({
-          email:result.email,
-          fullName:result.fullName,
-          object_id:result.object_id,
-          isloggedIN:true
-        })
-        console.log("This is the value of the user logged in or not:: ",user.isloggedIN)
-        
-        alert("This is the object_id:: "+result.object_id)
+        // setUser({
+        //   email:result.email,
+        //   fullName:result.fullName,
+        //   object_id:result.object_id,
+        //   isloggedIN:true
+        // })
+        // console.log("This is the value of the user logged in or not:: ",user.isloggedIN)
+
+        // alert("This is the object_id:: "+result.object_id)
         // alert("This is the email "+result.email)
         // alert("This is the fullname "+result.fullName)
         navigate('/home');

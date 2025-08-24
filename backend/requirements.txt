@@ -3,3 +3,6 @@ flask_cors
 pyyaml
 pandas
 colorlog
+python-dotenv
+flask-jwt-extended
+bcrypt

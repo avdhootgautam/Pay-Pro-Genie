@@ -23,7 +23,7 @@ def custom_logger():
 
         #Add the levels for the console and file
         file_handler.setLevel(logging.DEBUG)
-        console_handler.setLevel(logging.INFO)
+        console_handler.setLevel(logging.DEBUG)
 
         #Now add the formatter for the file handlers
         color_formatter = colorlog.ColoredFormatter("%(log_color)s[%(asctime)s] [%(levelname)s] [%(name)s:%(lineno)d] - %(message)s%(reset)s")

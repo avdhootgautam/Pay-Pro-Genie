@@ -14,6 +14,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* PUBlIC ROUTES */}
+        <Route path="/" element={<WelcomePage/>}/>
         <Route path="/login" element={<LoginPage/>}/>
         <Route path="/signup" element={<SignupPage/>}/>
 

@@ -1,10 +1,12 @@
-from flask import Flask,request,jsonify
+from flask import Flask,request,jsonify,make_response
 from flask_cors import CORS
-import os,sys
+import os,sys,bcrypt,datetime
 from werkzeug.utils import secure_filename#This is used to extract the filename
 from bson import ObjectId#This is used to convert the string into ObjectId
 import pandas as pd
 from utils import read_config,custom_logger,extract_file_information
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity,set_access_cookies
+
 # Add the parent directory of `backend/` to sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 #Now we can import like this
@@ -21,7 +23,14 @@ logger.info(f"IN A API FILE")
 app=Flask(__name__)
 CORS(app)
 
-signup_db_object=signup_mongo()#dclared a database
+#here i will initialise the jwt_manager 
+app.config["JWT_SECRET_KEY"]=config["jwt"]["secret_key"]
+# logger.debug(f"This is the secret key :: {config["jwt"]["secret_key"]}")
+app.config["JWT_ACCESS_TOKEN_EXPIRES"]=datetime.timedelta(hours=config["jwt"]["access-token-expire-time"])
+# logger.debug(f"This is the time for expiring token:: {config["jwt"]["access-token-expire-time"]} and type of the time is {type(config["jwt"]["access-token-expire-time"])}")
+jwt=JWTManager(app)
+
+signup_db_object=signup_mongo()#declared a database
 users_collection=signup_db_object.create_db_connection("signup_db","users")
 
 
@@ -30,28 +39,40 @@ def sign_up():
     try:
         formData=request.get_json()
         logger.info(f"Form data received is :: {formData}")
+
         if not formData:
             logger.error(f"Didn't received the formData")
             return jsonify({"error":"Invalid or Missing JSON"}),400
+        
         if debug_signup:
             print(f"This is the formdata received from the frontend:: {formData}")
+
         fullName=formData.get("fullName")
         email=formData.get("email")
         password=formData.get("password")
         confirmPassword=formData.get("confirmPassword")
+
         if fullName=="" or email=="" or password=="" or confirmPassword=="":
             return jsonify({"message":"Empty Data not allowed!"}),404
+        
+        #Hash password using bcrypt
+        hash_password=bcrypt.hashpw(password.encode("utf-8"),bcrypt.gensalt()).decode("utf-8")
+        logger.info(f"This is the hashed_password:: {hash_password}")
+
         user_dict={
             "fullName":fullName,
             "email":email,
-            "password":password
+            "password":hash_password
         }
+
         #Check whether the user is present or not
         user_presence=signup_db_object.find_users(users_collection,{"email":email})
         if user_presence:
             return jsonify({"message":"User Already exists"}),409
+        
         signup_db_object.insert_users(users_collection,user_dict)
         return jsonify({"message": "User registered successfully!"}),200
+    
     except Exception as e:
         return jsonify({"error in signup":str(e)}),500
 
@@ -59,20 +80,23 @@ def sign_up():
 @app.route("/api/login",methods=["POST"])
 def login():
     try:
+        logger.info("IN LOGIN SERVICE")
+
         formData=request.get_json()
+        logger.info(f"This is the formData received from the frontend::{formData}")
         if not formData:
             return jsonify({"error":"Invalid or Missing JSON"}),400
+        
         email=formData.get("email")
         password_fetched=formData.get("password")
-        if debug_login:
-            print(f"This is the formData received from the frontend::{formData}")
+      
         email_presence=signup_db_object.find_users(users_collection,{"email":email})
         # customer_id_from_email=email_presence["_id"]
         user_password_saved=""
         user_fullName=""
         object_id=""
-        if debug_login:
-            print(f"This is the email_presence::{email_presence} and type of the email_presence is::{type(email_presence)}")
+        logger.debug(f"This is the email_presence::{email_presence} and type of the email_presence is::{type(email_presence)}")
+        
         if email_presence :
             user_password_saved=email_presence["password"]
             user_fullName=email_presence["fullName"]
@@ -80,9 +104,20 @@ def login():
             # print(f"This is the object id::{object_id}")
         else:
             return jsonify({"message":"User not registered. Please sign up first!!"}),404
-        if user_password_saved==password_fetched:
-            # print(f"Last step of log in")
-            return jsonify({"message": "Logged in successfully!","email":email,"fullName":user_fullName,"object_id":object_id}), 200
+        
+        #Verify Password 
+        if bcrypt.checkpw(password_fetched.encode("utf-8"),user_password_saved.encode("utf-8")):
+            #Creates JWT
+            logger.info("Checking Password")
+            access_token=create_access_token(identity={"email":email,"object_id":object_id,"fullName": user_fullName})
+            logger.info(f"This is the access_token:: {access_token}")
+
+            res=make_response(jsonify({"message": "Logged in successfully!"}))
+
+            #For sending the access token i will use set_access_cookies
+            set_access_cookies(res,access_token) #JWT in HttpOnly cookies
+            return res,200
+        
         else:
             return jsonify({"message":'Incorrect Credentials'}),401
     except Exception as e:
