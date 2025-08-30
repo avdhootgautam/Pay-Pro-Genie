@@ -2,6 +2,12 @@ dataset:
   train_dataset_path: ./dataset/train.csv
   test_dataset_path: ./dataset/test.csv 
 
+cors:
+  url_react: http://localhost:3000
+
 jwt:
   secret_key: super-strong-random-key
-  access-token-expire-time: 1
+  access_token_expire_time: 1
+  jwt_token_location: cookies
+  jwt_cookie_secure: False
+  jwt_cookie_samesite: LAX

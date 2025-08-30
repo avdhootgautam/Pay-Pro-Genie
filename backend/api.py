@@ -5,7 +5,7 @@ from werkzeug.utils import secure_filename#This is used to extract the filename
 from bson import ObjectId#This is used to convert the string into ObjectId
 import pandas as pd
 from utils import read_config,custom_logger,extract_file_information
-from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity,set_access_cookies
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity,set_access_cookies,get_jwt
 
 # Add the parent directory of `backend/` to sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -21,13 +21,20 @@ debug_login=False
 
 logger.info(f"IN A API FILE")
 app=Flask(__name__)
-CORS(app)
+CORS(app,
+     supports_credentials=True,
+     origins=[config["cors"]["url_react"]]
+)
 
 #here i will initialise the jwt_manager 
 app.config["JWT_SECRET_KEY"]=config["jwt"]["secret_key"]
 # logger.debug(f"This is the secret key :: {config["jwt"]["secret_key"]}")
-app.config["JWT_ACCESS_TOKEN_EXPIRES"]=datetime.timedelta(hours=config["jwt"]["access-token-expire-time"])
+app.config["JWT_ACCESS_TOKEN_EXPIRES"]=datetime.timedelta(hours=config["jwt"]["access_token_expire_time"])
 # logger.debug(f"This is the time for expiring token:: {config["jwt"]["access-token-expire-time"]} and type of the time is {type(config["jwt"]["access-token-expire-time"])}")
+app.config["JWT_COOKIE_SECURE"]=config["jwt"]["jwt_cookie_secure"]
+logger.warning(f"Change jwt cookie secure to true if gonna use it in production")
+app.config["JWT_COOKIE_SAMESITE"]=config["jwt"]["jwt_cookie_samesite"]
+app.config["JWT_TOKEN_LOCATION"]=config["jwt"]["jwt_token_location"]
 jwt=JWTManager(app)
 
 signup_db_object=signup_mongo()#declared a database
@@ -109,11 +116,11 @@ def login():
         if bcrypt.checkpw(password_fetched.encode("utf-8"),user_password_saved.encode("utf-8")):
             #Creates JWT
             logger.info("Checking Password")
-            access_token=create_access_token(identity={"email":email,"object_id":object_id,"fullName": user_fullName})
+            access_token=create_access_token(identity=object_id,additional_claims={"email":email,"object_id":object_id,"fullName": user_fullName})
             logger.info(f"This is the access_token:: {access_token}")
 
             res=make_response(jsonify({"message": "Logged in successfully!"}))
-
+            logger.info(f"This is the response :: {res}")
             #For sending the access token i will use set_access_cookies
             set_access_cookies(res,access_token) #JWT in HttpOnly cookies
             return res,200
@@ -123,6 +130,21 @@ def login():
     except Exception as e:
         return jsonify({"error in login":str(e)}),500
 
+@app.route("/api/me",methods=["GET"])
+@jwt_required()
+def me():
+    logger.info("IN ME")
+    try:
+        objectId=get_jwt_identity()
+        logger.debug(f"This is the objectID:: {objectId}")
+        claims=get_jwt()
+        logger.debug(f"This is the additional claims inside the cookies:: {claims}")
+
+        return jsonify({"message":"Content received via cookies","object_id":objectId,"email":claims["email"],"fullName":claims["fullName"]}),201
+    
+    except Exception as e:
+        logger.error(f"IN ME FOR TOKEN:: {e}")
+        return jsonify({"message":e}),500
 
 @app.route("/api/upload_dataset",methods=["POST"])
 def upload_dataset():

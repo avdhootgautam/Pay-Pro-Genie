@@ -6,12 +6,13 @@ import upload_dataset from "../../services/uploadDatasetService";
 import save_file_from_backend from "../../services/saveFileFromBackend"
 import check_file_exists from "../../services/checkFileExistsService";
 import { replace, useLocation, useNavigate } from "react-router-dom";
-import { UserContext } from "./UserContext";
+import userData from "../../services/userData";
+// import { UserContext } from "./UserContext";
 
 const DatasetUploadBody=()=>{
 
     const Navigate=useNavigate()
-    const {user}=useContext(UserContext)
+    // const {user}=useContext(UserContext)
 
     const [file,setFile]=useState(null);
     const[uploading,setUploading]=useState(false);
@@ -24,10 +25,18 @@ const DatasetUploadBody=()=>{
     const location=useLocation()
     
     useEffect(()=>{
+
+        //Here I can call the "/api/me" for the user Details
+            const fetchUser=async()=>{
+            const data =await userData() 
+            console.log("In DatasetUploadBody,this is the data :: ",data)
+
         // console.log(user.email+" "+user.fullName+" "+user.object_id)
-        setEmail(user.email|| "");
-        setFullName(user.fullName||"")
-        setObject_id(user.object_id||"")
+        // setEmail( "")
+        // setFullName("")
+        // setObject_id("")
+            }
+            fetchUser()
     },[])
 
     const handleFileChange=async(e)=>{

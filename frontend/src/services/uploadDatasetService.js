@@ -3,7 +3,8 @@ const upload_dataset=async(formData)=>{
         const response=await fetch("http://localhost:5000/api/upload_dataset",{
             method:"POST",
             // headers:{"Content-Type":"application/json"},
-            body:formData
+            body:formData,
+            credentials:"include"//Important to send the cookies 
             //Here we are not using headers and JSON.stringfy because its already done in a formData
         });
         if (response.ok){
