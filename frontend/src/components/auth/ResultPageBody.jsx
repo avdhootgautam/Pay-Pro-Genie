@@ -3,7 +3,7 @@ import styles from "../../styles/ResultPageBody.module.css"
 import {useState,useEffect, useContext} from "react"
 import fetch_details_of_file from "../../services/fetch_details_of_file_service"
 import FileCard from "./FileCard"
-import { UserContext } from "./UserContext"
+import userData from "../../services/userData"
 const ResultPageBody=()=>{
     // const [fileName,setFilename]=useState("")
     // const [rowCount,setrowCount]=useState(0)
@@ -15,26 +15,40 @@ const ResultPageBody=()=>{
     const [email,setEmail]=useState("")
     const [object_id,setObject_id]=useState("")
     const [fullName,setFullName]=useState("")
-    const {user}=useContext(UserContext)
+    // const {user}=useContext(UserContext)
     
     useEffect(()=>{
-        const localemail=user.email||"";
-        const localobejct_id=user.object_id||""
-        const localfullName=user.fullName||"";
 
-        setEmail(localemail);
-        setObject_id(localobejct_id);
-        setFullName(localfullName);
+        const fetchUser=async()=>{
+            const data =await userData() 
+            console.log("In DatasetUploadBody,this is the data :: ",data)
+            // const localemail=data?.email||"";
+            // const localobejct_id=data?.object_id||""
+            // const localfullName=data?.fullName||"";
 
-        const data_from_local_storage={
-                "email":localemail,"fullName":localfullName,"object_id":localobejct_id
+            setEmail(data?.email);
+            setObject_id(data?.object_id);
+            console.log("This is the object id :: ",data?.object_id)
+            setFullName(data?.fullName);
+
             }
 
-        console.log("This is the data from the local storage:: "+data_from_local_storage["email"]+" "+data_from_local_storage["fullName"])
-        //Here i will write one more api hitting at the backend and getting the information of the file
-        const fetching_file_info=async(data_from_local_storage)=>{
+        fetchUser()
+    }
+    ,[])
+
+    useEffect(()=>{
+        if (!email ||!fullName ||!object_id){
+            return 
+        }//Wait until the value are set
+        const data_from_local_storage={
+                "email":email,"fullName":fullName,"object_id":object_id
+            }
+        const fetch_details=async(data_from_local_storage)=>{
+            
             try{
-                const response=await fetch_details_of_file(data_from_local_storage)
+                console.log("IN A fetch_details,this is the data_from_local_storage:: ",data_from_local_storage)
+            const response=await fetch_details_of_file(data_from_local_storage)
                 //Here i will set the "data" dictionary because while ,mapping it will creating the dictionary corresponding to values
                 setFileInfo(response?.data||{})
                 console.log("This is the response cam from the databse:: "+ response['data'])
@@ -43,11 +57,8 @@ const ResultPageBody=()=>{
                 alert("error in ResultPageBody:: "+err)
             }
         }
-
-        fetching_file_info(data_from_local_storage)
-    }
-    ,[])
-
+        fetch_details(data_from_local_storage)
+    },[email,fullName,object_id])
 
     return(
     <Box className={styles.BodyContainer}>

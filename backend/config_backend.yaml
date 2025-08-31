@@ -9,5 +9,6 @@ jwt:
   secret_key: super-strong-random-key
   access_token_expire_time: 1
   jwt_token_location: cookies
-  jwt_cookie_secure: False
-  jwt_cookie_samesite: LAX
+  jwt_cookie_secure: False #must be False for localhost
+  jwt_cookie_samesite: LAX #"None" only if you’re mixing domains in production
+  jwt_cookie_csrf_protect: False #Decides whether you want to do the verification usin gcsrf token or not

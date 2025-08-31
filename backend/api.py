@@ -35,6 +35,7 @@ app.config["JWT_COOKIE_SECURE"]=config["jwt"]["jwt_cookie_secure"]
 logger.warning(f"Change jwt cookie secure to true if gonna use it in production")
 app.config["JWT_COOKIE_SAMESITE"]=config["jwt"]["jwt_cookie_samesite"]
 app.config["JWT_TOKEN_LOCATION"]=config["jwt"]["jwt_token_location"]
+app.config["JWT_COOKIE_CSRF_PROTECT"] = config["jwt"]["jwt_cookie_csrf_protect"]
 jwt=JWTManager(app)
 
 signup_db_object=signup_mongo()#declared a database
@@ -147,6 +148,7 @@ def me():
         return jsonify({"message":e}),500
 
 @app.route("/api/upload_dataset",methods=["POST"])
+@jwt_required()
 def upload_dataset():
     try:
         print(f"In a upload dataset api.")
@@ -182,6 +184,7 @@ def upload_dataset():
     
 
 @app.route("/api/save-file",methods=["POST"])
+@jwt_required()
 def save_file():
     try:
         userData=request.get_json()
@@ -227,6 +230,7 @@ def save_file():
     
 
 @app.route("/api/check-uploaded-file-exists",methods=['POST'])
+@jwt_required()
 def check_uploaded_file_exists():
     logger.info(f'IN A CHECK UPLOAD FILE EXIST')
     try:
@@ -254,6 +258,7 @@ def check_uploaded_file_exists():
         return jsonify({"message":"Failed in checking whether the file exist or not"}),500
 
 @app.route("/api/fetch_details_of_a_file",methods=["POST"])
+@jwt_required()
 def fetch_the_details_of_the_files():
     logger.info(f"IN A FETCH DETAILS OF A FILE")
     try:

@@ -32,9 +32,9 @@ const DatasetUploadBody=()=>{
             console.log("In DatasetUploadBody,this is the data :: ",data)
 
         // console.log(user.email+" "+user.fullName+" "+user.object_id)
-        // setEmail( "")
-        // setFullName("")
-        // setObject_id("")
+        setEmail(data?.email||"")
+        setFullName(data?.fullName||"")
+        setObject_id(data?.object_id||"")
             }
             fetchUser()
     },[])

@@ -2,10 +2,11 @@ const save_file_from_backend=async(Data)=>{
     try{
         console.log(Data)
         console.log(Data.email)
-        const response=await fetch("http://127.0.0.1:5000/api/save-file",{
+        const response=await fetch("http://localhost:5000/api/save-file",{
             method:"POST",
             headers:{"Content-type":"application/json"},
-            body: JSON.stringify(Data)
+            body: JSON.stringify(Data),
+            credentials: "include"
         });
         if (response.ok){
             const result=await response.json();

@@ -1,7 +1,7 @@
 const userData=async()=>{
     try{
         console.log("IN userData")
-        const res=await fetch("http://127.0.0.1:5000/api/me",{
+        const res=await fetch("http://localhost:5000/api/me",{
         method:"GET",
         credentials:"include"
     })
