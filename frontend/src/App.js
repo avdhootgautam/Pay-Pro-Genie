@@ -26,7 +26,7 @@ function App() {
         }/>
         <Route path="/upload-dataset" element={<DatasetUploadPage/>}/>
         <Route path="/result" element={<ResultPage/>}/>
-        <Route path="/view-page" element={<ViewPage/>}/>
+        <Route path="/view-page" element={<ViewPage/>}/> 
       </Routes>
     </BrowserRouter>
   );

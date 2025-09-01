@@ -286,6 +286,7 @@ def fetch_the_details_of_the_files():
         return jsonify({"message":f"Error in fetching the details of a file {e}"}),500
     
 @app.route("/api/fetch-the-file-info-with-data",methods=["POST"])
+@jwt_required()
 def fetch_the_file_info_with_data():
     logger.info(f"IN A fetch-the-file-info-with-data")
     try:

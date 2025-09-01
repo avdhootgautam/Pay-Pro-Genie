@@ -1,7 +1,13 @@
 import { Card, CardContent, Typography, Box, Button } from "@mui/material";
-
+import { useNavigate } from "react-router-dom";
 const FileCard = ({ file }) => {
-    console.log("This is the file :: "+file+" and type fo te file is "+"")
+    // console.log("This is the file :: "+file+" and type fo te file is "+"")
+    const Navigate=useNavigate();
+    const handleViewPage=()=>{
+      //encodeURIComponent helps in decoding the language such as "sales file" or sales$file.csv then it will safely handle it while encoding and decoding
+      Navigate(`/view-page/?file_name=${encodeURIComponent(file.file_name)}`)
+    }
+    
   return (
     <Card
       sx={{
@@ -39,7 +45,7 @@ const FileCard = ({ file }) => {
       </CardContent>
 
       <Box mt={2} display="flex" justifyContent="space-between">
-        <Button size="small" variant="outlined" color="primary">
+        <Button size="small" variant="outlined" color="primary" onClick={handleViewPage}>
           Preview
         </Button>
         <Button size="small" variant="outlined" color="error">

@@ -51,7 +51,7 @@ const ResultPageBody=()=>{
             const response=await fetch_details_of_file(data_from_local_storage)
                 //Here i will set the "data" dictionary because while ,mapping it will creating the dictionary corresponding to values
                 setFileInfo(response?.data||{})
-                console.log("This is the response cam from the databse:: "+ response['data'])
+                console.log("This is the response cam from the databasse:: "+ response['data'])
             }
             catch(err){
                 alert("error in ResultPageBody:: "+err)
@@ -69,7 +69,7 @@ const ResultPageBody=()=>{
             {/* We can use map if dealing with the multiple data of same type,example is below */}
             {Object.entries(fileInfo).map(([key,file])=>{
                 // console.log("This is the file:: "+file.data)
-                //Here key is not using as a prop,its for React internal use as helps in tracking which fierel changed,
+                //Here key is not using as a prop,its for React internal use as helps in tracking which file changed,
                 return <FileCard key={key} file={file}/>
             })}
         </Box>
