@@ -16,8 +16,11 @@ class signup_mongo():
         users_collection.insert_one(user_dict)
         return 
     
-    def find_users(self,users_collection,dict):
-        user_presence=users_collection.find_one(dict)
+    def find_users(self,users_collection,dict,projection):
+        if projection:
+            user_presence=users_collection.find_one(dict,projection)
+        else:
+            user_presence=users_collection.find_one(dict)
         return user_presence
     
     def update_users(self,users_collection,dict):

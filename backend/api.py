@@ -103,7 +103,7 @@ def login():
         user_password_saved=""
         user_fullName=""
         object_id=""
-        logger.debug(f"This is the email_presence::{email_presence} and type of the email_presence is::{type(email_presence)}")
+        # logger.debug(f"This is the email_presence::{email_presence} and type of the email_presence is::{type(email_presence)}")
         
         if email_presence :
             user_password_saved=email_presence["password"]
@@ -284,6 +284,47 @@ def fetch_the_details_of_the_files():
     except Exception as e:
         logger.error(f"Error in fetching the details of a file:: {e}")
         return jsonify({"message":f"Error in fetching the details of a file {e}"}),500
+    
+@app.route("/api/fetch-the-file-info-with-data",methods=["POST"])
+def fetch_the_file_info_with_data():
+    logger.info(f"IN A fetch-the-file-info-with-data")
+    try:
+        payload=request.get_json()# Here we will get the objectId and filename
+        if payload:
+            logger.debug(f"This is the payload:: {payload}")
+    except Exception as e:
+        logger.error(f"Error in fetch_the_file_info_with_data and the error is :: {e}")
+        return jsonify({"message":"Error in fetch_the_file_info_with_data"}),500
+    
+    #Writing the query for finding the file with particualar object_id and filename
+    query={
+        "_id": ObjectId(payload["object_id"])
+    }
+    #Here the projection for finding the particular file_info from the data
+    projection={
+        "files": {
+        "$elemMatch": {"fileInfo.file_name": payload["file_name"]}
+        },
+        "fullName":1
+    }
+
+    #Fetching the data of an user from the db
+    single_user_info=signup_db_object.find_users(users_collection,query,projection)
+    if single_user_info:
+        logger.debug(f"This is the fullname of the single_user_info:: {single_user_info["fullName"]}")
+
+    else:
+        logger.error(f"IN A fetch-the-file-info-with-data,Not able to find the user_info and the error is :: {e}")
+        return jsonify({'message':'IN A fetch-the-file-info-with-data,Not able to find the user_info',"error":e}),500
+    
+    json_data={
+        "message":"Success",
+        "number_of_columns":single_user_info["files"][0]["fileInfo"]["number_of_columns"],
+        "number_of_rows":single_user_info["files"][0]["fileInfo"]["number_of_rows"],
+    }
+    return jsonify(json_data),201
+    
+
 
 if __name__=="__main__":
     app.run(debug=True)
