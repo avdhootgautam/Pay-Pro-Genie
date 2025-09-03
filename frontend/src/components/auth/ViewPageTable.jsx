@@ -1,26 +1,23 @@
 import { DataGrid } from '@mui/x-data-grid';
 import { Box } from '@mui/material';
 
+// const columns = [
+//   { field: 'id', headerName: 'ID', width: 90 },
+//   { field: 'firstName', headerName: 'First name', width: 150 },
+//   { field: 'lastName', headerName: 'Last name', width: 150 },
+//   { field: 'age',headerName: 'Age',type: 'number',width: 110,},
+// ];
 const columns = [
-  { field: 'id', headerName: 'ID', width: 90 },
-  { field: 'firstName', headerName: 'First name', width: 150 },
-  { field: 'lastName', headerName: 'Last name', width: 150 },
-  { field: 'age',headerName: 'Age',type: 'number',width: 110,},
+  { field: 'id', headerName: 'id', width: 90 },
+  { field: 'abc', headerName: 'ABC', width: 150 },
+  { field: 'lastName', headerName: 'lastName', width: 150 },
+  { field: 'age',headerName: 'age',type: 'number',width: 110,},
 ];
 
 const rows = [
-  { id: 1, lastName: 'Doe', firstName: 'John', age: 25 },
-  { id: 2, lastName: 'Smith', firstName: 'Anna', age: 30 },
-  { id: 3, lastName: 'Brown', firstName: 'James', age: 35 }, 
-  { id: 1, lastName: 'Doe', firstName: 'John', age: 25 },
-  { id: 2, lastName: 'Smith', firstName: 'Anna', age: 30 },
-  { id: 3, lastName: 'Brown', firstName: 'James', age: 35 },
-  { id: 1, lastName: 'Doe', firstName: 'John', age: 25 },
-  { id: 2, lastName: 'Smith', firstName: 'Anna', age: 30 },
-  { id: 3, lastName: 'Brown', firstName: 'James', age: 35 },
-  { id: 1, lastName: 'Doe', firstName: 'John', age: 25 },
-  { id: 2, lastName: 'Smith', firstName: 'Anna', age: 30 },
-  { id: 3, lastName: 'Brown', firstName: 'James', age: 35 },
+  { id: 1, lastName: 'Doe', abc: 'John', age: 25 },
+  { id: 2, lastName: 'Smith', abc: 'Anna', age: 30 },
+  { id: 3, lastName: 'Brown', abc: 'James', age: 35 }, 
 ];
 
 const ViewPageTable = () => {

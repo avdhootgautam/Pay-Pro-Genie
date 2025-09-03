@@ -54,3 +54,28 @@ def extract_file_information(csv_file_path):
     logger.info(f"This is the number_of_rows:: {number_of_rows}")
 
     return file_info
+
+def convert_dataframe_to_rows_and_columns_for_table(df):
+    logger.info(f"IN UTILS")
+    rows=[]
+    columns=[]
+    columns.append({"field":"id","headerName":"id","width":90})
+    
+    # create the list of dict for all of the columns
+    number_of_columns=df.columns
+    logger.info(f"IN UTILS,Total number of columns received is:: {number_of_columns}")
+    
+    for col in df.columns:
+        if df[col].dtype=="int64":
+            # print(f"This is the column:: {col}")
+            columns.append({"field":col,"headerName":col,"width":90,"type":"number"})
+        else:
+            columns.append({"field":col,"headerName":col,"width":90})
+    
+
+    # create the list of dict for all of the rows
+    index=1
+    for element in columns:
+        pass
+
+    return rows,columns

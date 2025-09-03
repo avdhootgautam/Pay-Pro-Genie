@@ -4,7 +4,7 @@ import os,sys,bcrypt,datetime
 from werkzeug.utils import secure_filename#This is used to extract the filename
 from bson import ObjectId#This is used to convert the string into ObjectId
 import pandas as pd
-from utils import read_config,custom_logger,extract_file_information
+from utils import read_config,custom_logger,extract_file_information,convert_dataframe_to_rows_and_columns_for_table
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity,set_access_cookies,get_jwt
 
 # Add the parent directory of `backend/` to sys.path
@@ -313,15 +313,25 @@ def fetch_the_file_info_with_data():
     single_user_info=signup_db_object.find_users(users_collection,query,projection)
     if single_user_info:
         logger.debug(f"This is the fullname of the single_user_info:: {single_user_info["fullName"]}")
-
+        print(f"This is the data :: \n{single_user_info["files"][0]["data"]}")
     else:
         logger.error(f"IN A fetch-the-file-info-with-data,Not able to find the user_info and the error is :: {e}")
         return jsonify({'message':'IN A fetch-the-file-info-with-data,Not able to find the user_info',"error":e}),500
+    
+    #Here convert the dict to dataframe(df) 
+    new_df=pd.DataFrame(single_user_info["files"][0]["data"])
+    logger.debug(f"Converting the list_of_dict back to dataframe:: \n{new_df.sample(5)}")
+
+    #Here get rows and columns from dataframe
+    rows,columns=convert_dataframe_to_rows_and_columns_for_table(new_df)
+
+    logger.info(f"In api,the columns list of dictionary is :: {columns}")
     
     json_data={
         "message":"Success",
         "number_of_columns":single_user_info["files"][0]["fileInfo"]["number_of_columns"],
         "number_of_rows":single_user_info["files"][0]["fileInfo"]["number_of_rows"],
+
     }
     return jsonify(json_data),201
     
