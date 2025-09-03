@@ -57,7 +57,6 @@ def extract_file_information(csv_file_path):
 
 def convert_dataframe_to_rows_and_columns_for_table(df):
     logger.info(f"IN UTILS")
-    rows=[]
     columns=[]
     columns.append({"field":"id","headerName":"id","width":90})
     
@@ -74,8 +73,12 @@ def convert_dataframe_to_rows_and_columns_for_table(df):
     
 
     # create the list of dict for all of the rows
+    working_dict=df.to_dict(orient="records")
     index=1
-    for element in columns:
-        pass
+    for element in working_dict:
+        element["id"]=index
+        index+=1
+    #Here i will have to append the id as it is present in a column
+    # print(f"This is the working dict:: {working_dict}")
 
-    return rows,columns
+    return working_dict,columns

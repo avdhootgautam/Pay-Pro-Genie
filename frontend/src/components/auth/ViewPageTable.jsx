@@ -7,21 +7,24 @@ import { Box } from '@mui/material';
 //   { field: 'lastName', headerName: 'Last name', width: 150 },
 //   { field: 'age',headerName: 'Age',type: 'number',width: 110,},
 // ];
-const columns = [
-  { field: 'id', headerName: 'id', width: 90 },
-  { field: 'abc', headerName: 'ABC', width: 150 },
-  { field: 'lastName', headerName: 'lastName', width: 150 },
-  { field: 'age',headerName: 'age',type: 'number',width: 110,},
-];
+// const columns = [
+//   { field: 'id', headerName: 'id', width: 90 },
+//   { field: 'abc', headerName: 'ABC', width: 150 },
+//   { field: 'lastName', headerName: 'lastName', width: 150 },
+//   { field: 'age',headerName: 'age',type: 'number',width: 110,},
+// ];
 
-const rows = [
-  { id: 1, lastName: 'Doe', abc: 'John', age: 25 },
-  { id: 2, lastName: 'Smith', abc: 'Anna', age: 30 },
-  { id: 3, lastName: 'Brown', abc: 'James', age: 35 }, 
-];
+// const rows = [
+//   { id: 1, lastName: 'Doe', abc: 'John', age: 25 },
+//   { id: 2, lastName: 'Smith', abc: 'Anna', age: 30 },
+//   { id: 3, lastName: 'Brown', abc: 'James', age: 35 }, 
+// ];
 
-const ViewPageTable = () => {
+const ViewPageTable = (props) => {
+  // console.log("This is the props:: "+props)
+  console.log("This is the rows:: ",props.rows)
   return (
+    
     <Box sx={{
       height: 400,
       width: '98%',
@@ -29,10 +32,10 @@ const ViewPageTable = () => {
       marginTop:'10px',
       }}>
       <DataGrid
-        rows={rows}
-        columns={columns}
+        rows={props.rows}
+        columns={props.columns}
         pageSize={5}
-        rowsPerPageOptions={[10]}
+        rowsPerPageOptions={[5,10,20]}
         sx={{
           backgroundColor: '#1e1e1e',
           color: 'whitesmoke',

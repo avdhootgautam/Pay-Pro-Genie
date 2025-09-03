@@ -326,12 +326,13 @@ def fetch_the_file_info_with_data():
     rows,columns=convert_dataframe_to_rows_and_columns_for_table(new_df)
 
     logger.info(f"In api,the columns list of dictionary is :: {columns}")
-    
+    logger.info(f"In api,the rows list of dictionary is :: {rows}")
     json_data={
         "message":"Success",
         "number_of_columns":single_user_info["files"][0]["fileInfo"]["number_of_columns"],
         "number_of_rows":single_user_info["files"][0]["fileInfo"]["number_of_rows"],
-
+        "rows":rows,
+        "columns":columns
     }
     return jsonify(json_data),201
     

@@ -15,6 +15,8 @@ const ViewPageBody=()=>{
     const [object_id,setObjectId]= useState("")
     const [number_of_columns,setNumberOfColumns]=useState(0)
     const [number_of_rows,setNumberOfRows]=useState(0)
+    const [rows,setRows]=useState([])
+    const [columns,setColumns]=useState([])
     const [search_params]=useSearchParams()
     const file_name=search_params.get("file_name")
 
@@ -25,10 +27,14 @@ const ViewPageBody=()=>{
      
     useEffect(()=>{
         const user_credentials=async()=>{
+            try{
                 const user_data=await userData();
                 console.log("IN ViewPageBody,userData is:: ",user_data)
                 console.log("IN ViewPageBody,userData object_id is:: ",user_data.object_id)
                 setObjectId(user_data.object_id)
+            }catch(err){
+                console.log("In ViewPageBody,this is the error "+err)
+            }
         }
         user_credentials()
         },[])
@@ -43,12 +49,18 @@ const ViewPageBody=()=>{
         }
 
         const userDetailsWithData=async(payload)=>{
+        try{
             const response= await fetchFileInfoWithData(payload);
             console.log("In userDetailsWithData,This is the response ",response)
             setNumberOfColumns(response["number_of_columns"])
             setNumberOfRows(response["number_of_rows"])
+            setRows(response["rows"])
+            setColumns(response["columns"])
+        }catch(err){
+            console.log("In a ViewPageBody,this is the error",err) 
         }
-        
+        }
+
         userDetailsWithData(payload)
     },[object_id])
     
@@ -101,7 +113,7 @@ const ViewPageBody=()=>{
                 </Box>
             </Box>
             <Box className={styles.SecondSection}>
-                <ViewPageTable/>
+                <ViewPageTable rows={rows} columns={columns}/>
             </Box>
         </Box>
     )
