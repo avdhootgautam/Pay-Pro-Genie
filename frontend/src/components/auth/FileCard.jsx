@@ -1,13 +1,36 @@
 import { Card, CardContent, Typography, Box, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-const FileCard = ({ file }) => {
+import { useEffect } from "react";
+import DeleteFileCardComponent from "../../services/deleteFileCardComponent";
+const FileCard = ({ file ,object_id}) => {
     // console.log("This is the file :: "+file+" and type fo te file is "+"")
+    const file_name=encodeURIComponent(file.file_name)
+    console.log('In a file card,filename is :: ',file_name)
     const Navigate=useNavigate();
     const handleViewPage=()=>{
       //encodeURIComponent helps in decoding the language such as "sales file" or sales$file.csv then it will safely handle it while encoding and decoding
-      Navigate(`/view-page/?file_name=${encodeURIComponent(file.file_name)}`)
+      Navigate(`/view-page/?file_name=${file_name}`)
     }
     
+    //here i am writing the function for deleting the file
+      const deleteFileCard=async()=>{
+        const payload={
+          "object_id":object_id,
+          "file_name":file_name
+        }
+        try
+        {
+          const response=await DeleteFileCardComponent(payload);
+          if (response.message==="Successfully received the data"){
+            window.location.reload();
+          }
+          alert("File Deleted:: ",response.message)
+        }catch(err){
+          console.error("IN A File Card,error in deleteFileCard is ",err)
+        }
+
+      }
+
   return (
     <Card
       sx={{
@@ -48,7 +71,7 @@ const FileCard = ({ file }) => {
         <Button size="small" variant="outlined" color="primary" onClick={handleViewPage}>
           Preview
         </Button>
-        <Button size="small" variant="outlined" color="error">
+        <Button size="small" variant="outlined" color="error" onClick={deleteFileCard}>
           Delete
         </Button>
       </Box>

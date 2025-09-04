@@ -70,7 +70,7 @@ const ResultPageBody=()=>{
             {Object.entries(fileInfo).map(([key,file])=>{
                 // console.log("This is the file:: "+file.data)
                 //Here key is not using as a prop,its for React internal use as helps in tracking which file changed,
-                return <FileCard key={key} file={file}/>
+                return <FileCard key={key} file={file} object_id={object_id}/>
             })}
         </Box>
     </Box>

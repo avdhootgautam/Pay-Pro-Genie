@@ -22,7 +22,7 @@ function App() {
         <Route path="/home" element={
           <ProtectedRoute>
           <HomePage/>
-          </ProtectedRoute>
+        </ProtectedRoute>
         }/>
         <Route path="/upload-dataset" element={<DatasetUploadPage/>}/>
         <Route path="/result" element={<ResultPage/>}/>

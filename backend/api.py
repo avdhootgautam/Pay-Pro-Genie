@@ -336,7 +336,36 @@ def fetch_the_file_info_with_data():
     }
     return jsonify(json_data),201
     
-
-
+@app.route("/api/delete-file-card",methods=["POST"])
+@jwt_required()
+def delete_the_file_card():
+    logger.info("IN api ,delete-file-card")
+    try:
+        payload=request.get_json()
+        print(f"This is the payload fetched from the frontend:: {payload}")
+        
+    except Exception as e:
+        logger.error(f"IN api ,delete-file-card,error is :: {e}")
+        return jsonify({"message":f"IN api ,delete-file-card,error is :: {e}"}),500
+    
+    query={
+            "_id": ObjectId(payload["object_id"])
+        }
+    projection= { "$pull": { 
+      "files": { "fileInfo.file_name": payload["file_name"] }  
+    } 
+    }
+    
+    result=signup_db_object.delete_file(users_collection,query,projection)
+    if result=="File Deleted":
+        logger.info(f"File Deleted")
+        return jsonify({"message":"Successfully received the data"}),201
+    elif result=="No File Deleted":
+        logger.info(f"No File Deleted")
+        return jsonify({"message":"File Doesn't Exist"}),201
+    else:
+        logger.error(f"IN delete_the_file_card,Error in Deleting the file")
+        return jsonify({"error":f"IN delete_the_file_card,Error in Deleting the file"}),500
+    
 if __name__=="__main__":
     app.run(debug=True)

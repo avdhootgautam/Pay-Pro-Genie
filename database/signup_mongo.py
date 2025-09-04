@@ -30,6 +30,13 @@ class signup_mongo():
         # {"$set": {"csv_data": csv_data}}
         return result
 
+    def delete_file(self,users_collection,dict,projection=None):
+        if projection:
+            users_collection.update_one(dict,projection)
+            return "File Deleted"
+        return "No File Deleted"
+
+
 
 
 if __name__=="__main__":

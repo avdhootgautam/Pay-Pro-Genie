@@ -14,12 +14,18 @@ const Header=()=>{
         if(location.pathname!="/home")
         {Navigate('/home', { replace: true });}
     }
+
     const handleDatasetUploadButton=(e)=>{
         e.preventDefault()
         //here { replace: true } is preventing in stacking the browser with same link .
         if(location.pathname!="/upload-dataset")
         {Navigate('/upload-dataset', { replace: true })}
         //Use of useLocation => This replaces the current entry in history ,preventing it from stacking up like:-/home → /upload_dataset → /home → /upload_dataset → /home...
+    }
+
+    const handleResultButton=(e)=>{
+        if(location.pathname!="/result")
+        {Navigate('/result', { replace: true })}
     }
     return(
         <Box className={styles.header}>
@@ -30,7 +36,7 @@ const Header=()=>{
             <Box className={styles.navBar} component="nav">
                 <Button onClick={handleHomeButton}>Home</Button>
                 <Button onClick={handleDatasetUploadButton}>Dataset Upload</Button>
-                <Button>Results</Button>
+                <Button onClick={handleResultButton}>Results</Button>
                 <Button>Documentation</Button>
                 <Button onClick={handleOpen}>Profile</Button>
             </Box>
