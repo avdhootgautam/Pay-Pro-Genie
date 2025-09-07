@@ -357,6 +357,14 @@ def delete_the_file_card():
     }
     
     result=signup_db_object.delete_file(users_collection,query,projection)
+
+    path_to_delete_file_from_dataset=os.path.join("dataset",payload["object_id"],payload["file_name"])
+    if os.path.exists(path_to_delete_file_from_dataset):
+        os.remove(path_to_delete_file_from_dataset)
+        logger.info(f"{payload["file_name"]} has been deleted")
+    else:
+        logger.info("File Doesn't exists.")
+        
     if result=="File Deleted":
         logger.info(f"File Deleted")
         return jsonify({"message":"Successfully received the data"}),201
