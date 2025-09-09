@@ -7,6 +7,7 @@ import save_file_from_backend from "../../services/saveFileFromBackend"
 import check_file_exists from "../../services/checkFileExistsService";
 import { replace, useLocation, useNavigate } from "react-router-dom";
 import userData from "../../services/userData";
+import SnackBarAlert from "./SnackBarAlert";
 // import { UserContext } from "./UserContext";
 
 const DatasetUploadBody=()=>{
@@ -22,6 +23,10 @@ const DatasetUploadBody=()=>{
     const [email,setEmail]=useState("")
     const [fullName,setFullName]=useState("")
     const [object_id,setObject_id]=useState("")
+    const [open_received_at_backend,setReceivedAtbackend]=useState(false)
+    const [open_save_file,setOpenSaveFile]=useState(false)
+    const [message_received_at_backend,setMessageReceivedAtbackend]=useState("")
+    const [message_save_file,setMessageSaveFile]=useState("")
     const location=useLocation()
     
     useEffect(()=>{
@@ -43,7 +48,7 @@ const DatasetUploadBody=()=>{
         e.preventDefault();
         try{
             const selected_file=e.target.files[0];
-            alert("This is the selected file:: "+selected_file)
+            // alert("This is the selected file:: "+selected_file)
             // alert("File Selected")
             setUploading(true);
             setFile(selected_file);
@@ -53,7 +58,11 @@ const DatasetUploadBody=()=>{
             // const object_id_1=localStorage.getItem("object_id")
             formData.append("object_id",object_id)
             const result=await upload_dataset(formData)
-            alert("Got the result::"+result.message)
+            // alert("Got the result::"+result.message)
+
+            //Put the Snack bar component over here
+            setReceivedAtbackend(true)
+            setMessageReceivedAtbackend("Save the File ")
             }
             catch(err){
                 alert("Got the error:: "+err)
@@ -71,11 +80,13 @@ const DatasetUploadBody=()=>{
         const data_from_local_storage={
             "email":email,"fullName":fullName,"object_id":object_id
         }
-        alert("This is the Data :: "+data_from_local_storage)
+        // alert("This is the Data :: "+data_from_local_storage)
         try{
         const response =await save_file_from_backend(data_from_local_storage);
         if (response.message==="file saved successfully!"){
-            alert("file has been saved successfully!")
+            // alert("file has been saved successfully!")
+            setOpenSaveFile(true)
+            setMessageSaveFile("File Saved Successfully")
         }
         else{
             alert("file has not been saved successfully!")
@@ -127,6 +138,7 @@ const DatasetUploadBody=()=>{
                 </label>
                 <Typography sx={{color:"whitesmoke",ml:"180px",mt:"20px"}}>Drag and Drop your files here</Typography>
             </Box>
+            <SnackBarAlert open={open_received_at_backend} message={message_received_at_backend} severity="info" onClose={()=>{setReceivedAtbackend(false)}}/>
             <Typography sx={{color:"whitesmoke",fontFamily:"Poppins",fontSize:"1.25rem",mt:"10px",ml:"15px",paddingTop:"10px;"}}>Upload Progress</Typography>
             {uploading&&
             <Box className={styles.progress_1}>
@@ -149,6 +161,7 @@ const DatasetUploadBody=()=>{
                 <Box className={styles.delete_save_buttons}>
                     <Button sx={{mt:"2rem",backgroundColor:"#466e8c",color:"whitesmoke"}}>DELETE</Button>
                     <Button sx={{mt:"2rem",ml:1,backgroundColor:"#466e8c",color:"whitesmoke"}} onClick={saveFile}>SAVE</Button>
+                    <SnackBarAlert open={open_save_file} severity="success" message={message_save_file} onClose={()=>{setOpenSaveFile(false)}}/>
                 </Box>
                 }
             </Box>
