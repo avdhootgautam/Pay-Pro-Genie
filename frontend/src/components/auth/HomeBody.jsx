@@ -4,6 +4,7 @@ import image_preprocessing_logo from "../../assets/image_preprocessing_logo.png"
 import numerical_preprocessing_logo from "../../assets/numerical_preprocessing_logo.png";
 import text_preprocessing_logo from "../../assets/text_preprocessing_logo.png";
 import { useState } from "react";
+import { Scale } from "@mui/icons-material";
 
 const HomeBody=()=>{
     const [vpaButton,setVpaButton]=useState(true)
@@ -38,7 +39,7 @@ const HomeBody=()=>{
     return (
     <Box className={styles.HomeBodyContainer}>
         <Box className={styles.welcome_text}>
-            <Typography sx={{color:"whitesmoke",fontFamily: "Open Sans",fontSize:30}}>Welcome to DataPreprocessingHub</Typography>
+            <Typography sx={{color:"whitesmoke",fontFamily: "Open Sans",fontSize:"30"}}>Welcome to DataPreprocessingHub</Typography>
         </Box>
         <Box className={styles.slogan_text}>
             <Typography sx={{color:"whitesmoke",fontFamily: "Poppins",fontSize:15}}>Your ultimate destination for data preprocessing .Explore your range of features designed to enhance you data processing workflow.</Typography>
@@ -82,9 +83,15 @@ const HomeBody=()=>{
                     }}} disabled>Data Analysis</Button>
                 </div>:
                 <div>
-                <Button sx={{marginRight:"3px",}}  >Data Visualisation</Button>
-                <Button>Data Preprocessing</Button>
-                <Button sx={{marginLeft:"3px"}}>Data Analysis</Button>
+                <Button sx={{marginRight:"3px","&:hover":{
+                    transform:"scale(1.06)",transition:"0.5s ease-in-out"
+                }}}  >Data Visualisation</Button>
+                <Button sx={{"&:hover":{
+                    transform:"scale(1.06)",transition:"0.5s ease-in-out"
+                }}}>Data Preprocessing</Button>
+                <Button sx={{marginLeft:"3px","&:hover":{
+                    transform:"scale(1.06)",transition:"0.3s ease-in-out"
+                }}}>Data Analysis</Button>
                 </div>
             }
         </Box>
