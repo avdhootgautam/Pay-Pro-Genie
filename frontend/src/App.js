@@ -6,6 +6,7 @@ import HomePage from "./pages/HomePage";
 import DatasetUploadPage from "./pages/DatasetUploadPage";
 import ViewPage from "./pages/ViewPage";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import NumericalPreprocessingPage from "./pages/NumericalPreprocessingPage";
 // import ViewFileCard from "./pages/ViewFileCard";
 import ResultPage from "./pages/ResultPage"
 function App() {
@@ -27,6 +28,7 @@ function App() {
         <Route path="/upload-dataset" element={<DatasetUploadPage/>}/>
         <Route path="/result" element={<ResultPage/>}/>
         <Route path="/view-page" element={<ViewPage/>}/> 
+        <Route path="/numerical-preprocessing" element={<NumericalPreprocessingPage/>}/>
       </Routes>
     </BrowserRouter>
   );

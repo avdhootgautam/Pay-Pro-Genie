@@ -5,17 +5,34 @@ import numerical_preprocessing_logo from "../../assets/numerical_preprocessing_l
 import text_preprocessing_logo from "../../assets/text_preprocessing_logo.png";
 import { useState } from "react";
 import { Scale } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 const HomeBody=()=>{
     const [vpaButton,setVpaButton]=useState(true)
     const [preprocessingStep,setPreprocessingStep]=useState(0)
-
+    const Navigate=useNavigate();
+    
     const handleClickBox=(step)=>{
         setPreprocessingStep(step)
         setVpaButton(false)
         // console.log("This is the preprocessing step chosen:",preprocessingStep)
     }
 
+    const handlePreprocessing=(preprocessingStep)=>{
+        console.log("In a preprocessing for a naviagtion ",preprocessingStep)
+        if (preprocessingStep==1){
+            // <Navigate to="/image-preprocessing" replace/>
+            Navigate("/image-preprocessing")
+        }
+        else if(preprocessingStep==2){
+            // <Navigate to="/numerical-preprocessing" replace/>
+            Navigate("/numerical-preprocessing")
+        }
+        else if (preprocessingStep==3){
+            // <Navigate to="/text-preprocessing" replace/>
+            Navigate("/text-preprocessing")
+        }
+    }
     //Here i will set the disability state for the three boxes
     const getBoxStyles=(step)=>{
         if (preprocessingStep===0){
@@ -88,7 +105,7 @@ const HomeBody=()=>{
                 }}}  >Data Visualisation</Button>
                 <Button sx={{"&:hover":{
                     transform:"scale(1.06)",transition:"0.5s ease-in-out"
-                }}}>Data Preprocessing</Button>
+                }}} onClick={()=>{handlePreprocessing(preprocessingStep)}}>Data Preprocessing</Button>
                 <Button sx={{marginLeft:"3px","&:hover":{
                     transform:"scale(1.06)",transition:"0.3s ease-in-out"
                 }}}>Data Analysis</Button>
