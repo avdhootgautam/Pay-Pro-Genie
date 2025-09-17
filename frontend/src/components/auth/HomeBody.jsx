@@ -6,12 +6,54 @@ import text_preprocessing_logo from "../../assets/text_preprocessing_logo.png";
 import { useState } from "react";
 import { Scale } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import userData from "../../services/userData";
+import create_empty_preprocessing_arrays from "../../services/createEmptyPreprocessingArrays";
 
 const HomeBody=()=>{
     const [vpaButton,setVpaButton]=useState(true)
     const [preprocessingStep,setPreprocessingStep]=useState(0)
+    const [object_id,setObject_id]=useState("")
+
     const Navigate=useNavigate();
     
+    useEffect(()=>{
+        const fetch_data=async()=>{
+        try{
+        const result=await userData();
+        console.log("In HomeBody ,User Details is:: ",result)
+        setObject_id(result?.object_id)
+        }catch(err){
+            console.log("In HomeBody ,unable to fetch the user details:: ",err)
+            throw err
+        }
+        }
+
+        fetch_data()
+        },[])
+    
+    //Here only i will call one function in useEffect for cinserting an arrays for Numerical,Image and Text
+    useEffect(()=>{
+        if(!object_id){
+            return 
+        }
+        console.log("In HomeBody,This is the object id:: ",object_id)
+        //Here only i will hit the api for inserting an arrays
+        const json_data={
+            "object_id":object_id
+        }
+        const creation_of_arrays=async(json_data)=>{
+            try{
+                const response=await create_empty_preprocessing_arrays(json_data)
+                console.log(response?.message)
+            }catch(err){
+                console.log("In Homebody creation_of_arrays:: ",err)
+            }
+        }
+
+        creation_of_arrays(json_data)
+    },[object_id])
+
     const handleClickBox=(step)=>{
         setPreprocessingStep(step)
         setVpaButton(false)
