@@ -9,12 +9,13 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import userData from "../../services/userData";
 import create_empty_preprocessing_arrays from "../../services/createEmptyPreprocessingArrays";
+import generateUniqueID from "../../services/generateUniqueID";
 
 const HomeBody=()=>{
     const [vpaButton,setVpaButton]=useState(true)
     const [preprocessingStep,setPreprocessingStep]=useState(0)
     const [object_id,setObject_id]=useState("")
-
+    const [task_id,setTask_id]=useState("")
     const Navigate=useNavigate();
     
     useEffect(()=>{
@@ -64,15 +65,15 @@ const HomeBody=()=>{
         console.log("In a preprocessing for a naviagtion ",preprocessingStep)
         if (preprocessingStep==1){
             // <Navigate to="/image-preprocessing" replace/>
-            Navigate("/image-preprocessing")
+            Navigate(`/image-preprocessing`)
         }
         else if(preprocessingStep==2){
             // <Navigate to="/numerical-preprocessing" replace/>
-            Navigate("/numerical-preprocessing")
+            Navigate(`/numerical-preprocessing?task_id=${task_id}`)
         }
         else if (preprocessingStep==3){
             // <Navigate to="/text-preprocessing" replace/>
-            Navigate("/text-preprocessing")
+            Navigate(`/text-preprocessing`)
         }
     }
     //Here i will set the disability state for the three boxes
@@ -95,6 +96,16 @@ const HomeBody=()=>{
         pointerEvents: "none", // prevent clicking
         }; 
     }
+    const generatetaskID=async()=>{
+            try{
+                const result= await generateUniqueID()
+                setTask_id(result?.data)
+                console.log("In HomeBody,this is the generated id with success message:: ",result)
+            }
+            catch (err){
+                console.log("In HomeBody,failed to fetch the uniqued id generated at the backend:: ",err)
+            }
+    }
     return (
     <Box className={styles.HomeBodyContainer}>
         <Box className={styles.welcome_text}>
@@ -111,7 +122,10 @@ const HomeBody=()=>{
                 <span style={{color:"whitesmoke"}}>Process and analyze visual data with ease using our image dataset loads</span>
             </Box>
 
-            <Box className={styles.preprocessing} onClick={()=>{handleClickBox(2)}}sx={getBoxStyles(2)}>
+            <Box className={styles.preprocessing} onClick={()=>{
+                handleClickBox(2);
+                generatetaskID();
+            }}sx={getBoxStyles(2)}>
                 <img src={numerical_preprocessing_logo} alt="Numerical Preprocessing" style={{height:120,width:120}}></img>
                 <Typography sx={{paddingTop:"5px",marginBottom:"5px"}}>Numerical Preprocessing</Typography>
                 <span style={{color:"whitesmoke"}}>Process and analyze visual data with ease using our numerical dataset loads </span>

@@ -7,6 +7,7 @@ import pandas as pd
 from utils import read_config,custom_logger,extract_file_information,convert_dataframe_to_rows_and_columns_for_table
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity,set_access_cookies,get_jwt
 from inserting_arrays_in_a_db import creating_preprocessing_arrays
+from generate_task_id import generate_task_id
 # Add the parent directory of `backend/` to sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 #Now we can import like this
@@ -163,6 +164,16 @@ def calling_creating_preprocessing_arrays():
     result=creating_preprocessing_arrays(users_collection,signup_db_object,object_id)
     return jsonify({"message":"Successfully received the data"}),201
 
+@app.route("/api/generate-unique-id",methods=["GET"])
+@jwt_required()
+def generate_unique_id():
+    try:
+        result=generate_task_id()
+        logger.debug(f"This is the result(in json)::{result}")
+        return jsonify({"message":"Successfully generated the unique id ","data":result["id"]}),201
+    except Exception as e:
+        return jsonify({"error":f"Error in generating the task_id{e}"}),500
+    
 @app.route("/api/upload_dataset",methods=["POST"])
 @jwt_required()
 def upload_dataset():
