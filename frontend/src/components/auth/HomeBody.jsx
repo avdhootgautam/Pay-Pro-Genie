@@ -63,15 +63,15 @@ const HomeBody=()=>{
 
     const handlePreprocessing=(preprocessingStep)=>{
         console.log("In a preprocessing for a naviagtion ",preprocessingStep)
-        if (preprocessingStep==1){
+        if (preprocessingStep===1){
             // <Navigate to="/image-preprocessing" replace/>
             Navigate(`/image-preprocessing`)
         }
-        else if(preprocessingStep==2){
+        else if(preprocessingStep===2){
             // <Navigate to="/numerical-preprocessing" replace/>
-            Navigate(`/numerical-preprocessing?task_id=${task_id}`)
+            Navigate(`/numerical-preprocessing?task_id=${task_id}&preprocessing_step=${preprocessingStep}`)
         }
-        else if (preprocessingStep==3){
+        else if (preprocessingStep===3){
             // <Navigate to="/text-preprocessing" replace/>
             Navigate(`/text-preprocessing`)
         }
