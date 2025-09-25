@@ -83,3 +83,12 @@ def convert_dataframe_to_rows_and_columns_for_table(df):
 
     return working_dict,columns
 
+def find_the_list_of_filenames(result_from_db):
+    list_of_filenames=[]
+    logger.info(f"In utils,This is the result from the db :: {result_from_db}")
+    for key,value in result_from_db.items():
+        print(f"This is the key::{key} and this is the value:: {value}")
+        for element in value:
+            list_of_filenames.append(element['fileInfo']['file_name'])
+    print(f"This is the list of the filenames:: {list_of_filenames}")
+    return list_of_filenames

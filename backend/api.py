@@ -8,6 +8,7 @@ from utils import read_config,custom_logger,extract_file_information,convert_dat
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity,set_access_cookies,get_jwt
 from inserting_arrays_in_a_db import creating_preprocessing_arrays
 from generate_task_id import generate_task_id
+from fetch_filenames_from_db import fetch_filenames_from_db
 # Add the parent directory of `backend/` to sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 #Now we can import like this
@@ -401,6 +402,30 @@ def delete_the_file_card():
     else:
         logger.error(f"IN delete_the_file_card,Error in Deleting the file")
         return jsonify({"error":f"IN delete_the_file_card,Error in Deleting the file"}),500
+
+@app.route("/api/find-list-of-filenames",methods=["POST"])
+@jwt_required()
+def find_list_of_filenames():
+    logger.info(f"In api,in finding list of filenames")
+    try:
+        payload=request.get_json()
+        logger.debug(f"In find-list-of-files,This is the payload received :: {payload}")
+    except Exception as e:
+        logger.error("Unable to fetched the payload")
+        return jsonify({"error":f"In find_list_of_filenames"}),500
     
+    object_id=payload["object_id"]
+    email=payload["email"]
+    # dict={"_id": ObjectId(object_id)}
+    try:
+        list_of_filenames=fetch_filenames_from_db(signup_db_object,users_collection,object_id,email)
+        logger.info(f"In API,in find_list_of_filenames,This is the list of the filenames:: {list_of_filenames}")
+    except Exception as e:
+        logger.error(f"Error in db ,fetch_filenames_from_db and the error is :: {e}")
+        return jsonify({'error':f"Error in db ,fetch_filenames_from_db and the error is :: {e}"}),500
+
+    return jsonify({"message":"Successfully received the data","list_of_filenames":list_of_filenames}),201
+
+
 if __name__=="__main__":
     app.run(debug=True)

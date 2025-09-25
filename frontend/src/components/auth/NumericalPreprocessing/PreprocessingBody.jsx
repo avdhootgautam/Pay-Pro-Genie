@@ -3,14 +3,24 @@ import PreprocessingSideBar from "./PreprocessingSideBar"
 import styles from "../../../styles/NumericalPreprocessing/PreprocessingBody.module.css"
 import { useState, useEffect} from "react"
 import { useSearchParams } from "react-router-dom";
-
-
+import PreprocessingTable from "./PreprocessingTable";
+// import SimpleListMenu from "./PreprocessingDropdown";
+import LongMenu from "./PreprocessingDropdown";
+import userData from "../../../services/userData";
+import fetchListOfFilenames from "../../../services/fetchListOfFilenames";
 const PreprocessingBody=()=>{
     const [open,setOpen]=useState(false)
     const [task_id,setTask_id]=useState("")
     const [preprocessingStep,setPreprocessingStep]=useState("")
     const [search_params]=useSearchParams()
-    
+    const [anchorEl, setAnchorEl] = useState(null);
+    // const open_dropdown_menu = Boolean(anchorEl);
+    const [open_table ,setOpenTable]=useState(false)
+    const [filename,setFileName]=useState("")
+    const [object_id,setObjectId]=useState("")
+    const [email,setEmail]=useState("")
+    const [fullName,setFullName]=useState("")
+    const [filenames,setFileNames]=useState([])
     useEffect(()=>{
             const handleUseEffect=()=>{
                 // if(!task_id || !preprocessingStep){
@@ -22,22 +32,53 @@ const PreprocessingBody=()=>{
                 if (taskIdFromParams){setTask_id(taskIdFromParams)}
                 if (preprocessingStepFromParams){setPreprocessingStep(preprocessingStepFromParams)}
             }
+            const handleUserData=async()=>{
+               
+                try{
+                    const user_credentials=await userData()
+                    console.log("In a Preprocessing Body this is the user credentials:: ",user_credentials)
+                    setObjectId(user_credentials["object_id"])
+                    setFullName(user_credentials["fullName"])
+                    setEmail(user_credentials["email"])
+                }catch(err){
+                    console.log("Error in preprocessing Body and the error is:: ",err)
+                    throw err;
+                }
+            }
+         const payload_for_filenames={
+                "object_id":object_id,
+                "email":email
+                }
+        const list_of_filenames=async(payload_for_filenames)=>{
+            try{
+                const response=await fetchListOfFilenames(payload_for_filenames)
+                console.log("IN a Preprocessing Dropdown ::",response )
+                setFileNames(response["list_of_filenames"])
+                // options=response
+
+            }catch(err){
+            console.log("Error in a Preprocessing Dropdown :: ",err)
+          }
+      }
             handleUseEffect()
-        },[search_params])
+            handleUserData()
+            list_of_filenames(payload_for_filenames)
+        },[search_params,object_id])
 
     return (
         <Box className={styles.PreprocessingBody}>
             <PreprocessingSideBar open={open} setOpen={setOpen}/>
-            <Box sx={{display:"flex",flexDirection:"column"}}>
-                <Box sx={{marginLeft:"12px", color:"whitesmoke" ,height:"20px",paddingTop:"0.75rem",color:"whitesmoke",}}>
+            <Box className={styles.ViewingAndPreprocessing}>
+                
+                <Box sx={{marginLeft:"12px", color:"whitesmoke" ,height:"20px",paddingTop:"0.75rem",color:"whitesmoke",display:"flex",flexDirection:"row"}}>
                 {preprocessingStep==="1"&&<Typography sx={{fontSize:"5rem",fontFamily: "Poppins, sans-serif"}}>Image Preprocessing</Typography>}
                 {preprocessingStep==="2"&&<Typography sx={{fontSize:"1.5rem",fontFamily: "Poppins, sans-serif"}}>Numerical Preprocessing</Typography>}
                 {preprocessingStep==="3"&&<Typography>Text Preprocessing</Typography>}
+                <Box ><LongMenu anchorEl={anchorEl} setAnchorEl={setAnchorEl} open_table ={open_table } setOpenTable={setOpenTable} setFileName={setFileName} filenames={filenames}/></Box>
                 </Box>
-
-                <Box>
-                    <h1>Table</h1>
-                </Box>
+                {open_table && 
+                <Box><PreprocessingTable /></Box>
+                }  
             </Box>
         </Box>
 
