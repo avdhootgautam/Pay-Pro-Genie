@@ -9,6 +9,7 @@ from flask_jwt_extended import JWTManager, create_access_token, jwt_required, ge
 from inserting_arrays_in_a_db import creating_preprocessing_arrays
 from generate_task_id import generate_task_id
 from fetch_filenames_from_db import fetch_filenames_from_db
+from fetch_dict_data_from_db import fetch_dict_from_db
 # Add the parent directory of `backend/` to sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 #Now we can import like this
@@ -412,7 +413,7 @@ def find_list_of_filenames():
         logger.debug(f"In find-list-of-files,This is the payload received :: {payload}")
     except Exception as e:
         logger.error("Unable to fetched the payload")
-        return jsonify({"error":f"In find_list_of_filenames"}),500
+        return jsonify({"error":f"In find_list_of_filenames and error is::{e}"}),500
     
     object_id=payload["object_id"]
     email=payload["email"]
@@ -426,6 +427,34 @@ def find_list_of_filenames():
 
     return jsonify({"message":"Successfully received the data","list_of_filenames":list_of_filenames}),201
 
+@app.route("/api/fetch_sample_data_for_table",methods=["POST"])
+@jwt_required()
+def fetch_the_sample_data_from_db_for_table():
+    logger.info(f"IN api,in fetch sample data for table")
+    try:
+        payload=request.get_json()
+        logger.debug(f"IN api, fetch_sample_data_from_db,This is the payload received :: {payload}")
+    except Exception as e:
+        logger.error(f"In api,fetch_sample_data_from_db and error is:: {e}")
+        return jsonify({"error":f"In api,fetch_sample_data_from_db and error is:: {e}"}),500
+    
+    try:
+        result=fetch_dict_from_db(signup_db_object,users_collection,payload["object_id"],payload["email"],payload["filename"])
+        print(f"In a fetch_sample_data_for_table, random 6 values are:: {result}")
+    except Exception as e:
+        logger.error(f"IN api, fetch_sample_data_from_db,Error in fetching the data from db and the error is :: {e}")
+        return jsonify({"error":f"IN api, fetch_sample_data_from_db,Error in fetching the data from db and the error is :: {e}"}),500
+    
+    rows,columns=convert_dataframe_to_rows_and_columns_for_table(result)
+    # print(f"This is the sample 6 rows:: {rows}" )
+    # print(f"This is the sample 6 columns:: {columns}")
+
+    json_data={
+        "message":"Successfully received the data",
+        "rows":rows,
+        "columns":columns
+    }
+    return jsonify(json_data),201
 
 if __name__=="__main__":
     app.run(debug=True)

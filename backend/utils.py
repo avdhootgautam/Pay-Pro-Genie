@@ -92,3 +92,21 @@ def find_the_list_of_filenames(result_from_db):
             list_of_filenames.append(element['fileInfo']['file_name'])
     print(f"This is the list of the filenames:: {list_of_filenames}")
     return list_of_filenames
+
+def convert_list_of_dict_to_csv(filename,data):
+    logger.info(f"In utils,this is the filename for which i am converting the list_of_dict to df:: {filename}")
+    data_for_the_file=data['files'][0]['data']
+    # logger.info(f"In utils,This is the data from where i will be extracting the list of dicts: {data_for_the_file}")
+    object_id=str(data['_id'])
+
+    # Convert back dict to df
+    df=pd.DataFrame(data_for_the_file)
+
+    #Save as csv
+    path_for_saving_the_file=os.path.join("dataset_2",object_id,"previous")
+    os.makedirs(path_for_saving_the_file,exist_ok=True)
+    filename_to_save_csv=path_for_saving_the_file+"/"+filename
+    df.to_csv(filename_to_save_csv,index=False)
+    logger.debug(f"This is the data which will be direct")
+    
+    return df.head(10)

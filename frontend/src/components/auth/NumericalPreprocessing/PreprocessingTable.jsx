@@ -1,24 +1,19 @@
 import { DataGrid } from '@mui/x-data-grid';
 import { Box } from '@mui/material';
 
-// const columns = [
-//   { field: 'id', headerName: 'ID', width: 90 },
-//   { field: 'firstName', headerName: 'First name', width: 150 },
-//   { field: 'lastName', headerName: 'Last name', width: 150 },
-//   { field: 'age',headerName: 'Age',type: 'number',width: 110,},
-// ];
-const columns = [
-  { field: 'id', headerName: 'id', width: 90 },
-  { field: 'abc', headerName: 'ABC', width: 150 },
-  { field: 'lastName', headerName: 'lastName', width: 150 },
-  { field: 'age',headerName: 'age',type: 'number',width: 110,},
-];
 
-const rows = [
-  { id: 1, lastName: 'Doe', abc: 'John', age: 25 },
-  { id: 2, lastName: 'Smith', abc: 'Anna', age: 30 },
-  { id: 3, lastName: 'Brown', abc: 'James', age: 35 }, 
-];
+// const columns = [
+//   { field: 'id', headerName: 'id', width: 90 },
+//   { field: 'abc', headerName: 'ABC', width: 150 },
+//   { field: 'lastName', headerName: 'lastName', width: 150 },
+//   { field: 'age',headerName: 'age',type: 'number',width: 110,},
+// ];
+
+// const rows = [
+//   { id: 1, lastName: 'Doe', abc: 'John', age: 25 },
+//   { id: 2, lastName: 'Smith', abc: 'Anna', age: 30 },
+//   { id: 3, lastName: 'Brown', abc: 'James', age: 35 }, 
+// ];
 
 const PreprocessingTable = (props) => {
   console.log("This is the props:: "+props)
@@ -28,15 +23,15 @@ const PreprocessingTable = (props) => {
     <Box sx={{
       height: 200,
     //   width:700,
-      width: '98%',
+      width: '70%',
       marginLeft:'10px',
       marginTop:'10px',
       }}>
       <DataGrid
         // rows={props.rows}
         // columns={props.columns}
-        rows={rows}
-        columns={columns}
+        rows={props.rows}
+        columns={props.columns}
         pageSize={5}
         rowsPerPageOptions={[5,10,20]}
         sx={{
