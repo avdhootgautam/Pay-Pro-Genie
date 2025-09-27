@@ -26,6 +26,8 @@ const PreprocessingTable = (props) => {
       width: '70%',
       marginLeft:'10px',
       marginTop:'10px',
+      border:'1.5px dashed white',
+      borderRadius:"1px"
       }}>
       <DataGrid
         // rows={props.rows}
@@ -37,7 +39,8 @@ const PreprocessingTable = (props) => {
         sx={{
           backgroundColor: '#1e1e1e',
           color: 'whitesmoke',
-          border: 'none',
+          borderRadius:"1px",
+          border: '1.5px dotted black',
           '& .MuiDataGrid-columnHeaders': {
             backgroundColor: '#333',
             color: '#2e2e2e',

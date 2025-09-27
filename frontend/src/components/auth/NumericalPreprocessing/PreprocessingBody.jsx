@@ -1,4 +1,4 @@
-import { Box , Typography} from "@mui/material"
+import { Box , Typography,Button} from "@mui/material"
 import PreprocessingSideBar from "./PreprocessingSideBar"
 import styles from "../../../styles/NumericalPreprocessing/PreprocessingBody.module.css"
 import { useState, useEffect} from "react"
@@ -24,6 +24,7 @@ const PreprocessingBody=()=>{
     const [filenames,setFileNames]=useState([])
     const [rows,setRows]=useState([])
     const [columns,setColumns]=useState([])
+    const [numericalPreproStep,setNumericalPreproStep]=useState(null)
     useEffect(()=>{
             const handleUseEffect=()=>{
                 // if(!task_id || !preprocessingStep){
@@ -118,7 +119,7 @@ const PreprocessingBody=()=>{
 
     return (
         <Box className={styles.PreprocessingBody}>
-            <PreprocessingSideBar open={open} setOpen={setOpen}/>
+            <PreprocessingSideBar open={open} setOpen={setOpen} setNumericalPreproStep={setNumericalPreproStep}/>
             <Box className={styles.ViewingAndPreprocessing}>
                 
                 <Box sx={{marginLeft:"12px", color:"whitesmoke" ,height:"20px",paddingTop:"0.75rem",color:"whitesmoke",display:"flex",flexDirection:"row"}}>
@@ -128,7 +129,31 @@ const PreprocessingBody=()=>{
                 <Box ><LongMenu anchorEl={anchorEl} setAnchorEl={setAnchorEl} open_table ={open_table } setOpenTable={setOpenTable} setFileName={setFileName} filenames={filenames} /></Box>
                 </Box>
                 {open_table && 
-                <Box><PreprocessingTable rows={rows} columns={columns}/></Box>
+                <Box >
+                    <PreprocessingTable rows={rows} columns={columns}/>
+                    <Button  variant="contained" color="primary"
+                         sx={{
+                            borderRadius: "8px",
+                            marginTop:"0.3rem",
+                            marginLeft:"0.5rem",
+                            transition: "all 0.3s ease", // smooth hover effect
+                            backgroundColor: "#1976d2",  // default color
+                            "&:hover": {
+                            backgroundColor: "#385b83ff", // darker shade on hover
+                            transform: "scale(1.05)",  // slight zoom
+                            boxShadow: "0px 4px 20px rgba(0,0,0,0.3)", // subtle shadow
+                            },
+                        }}
+                        >Previous
+                    </Button>
+                </Box>
+                }
+                {open_table && numericalPreproStep&&
+                    <Box sx={{border:"0.25px outset whitesmoke",height:"210px",width:"80%",marginLeft:'5px'}}>
+                        {numericalPreproStep=="Missing Values"&&<Box sx={{color:"whitesmoke"}}>{numericalPreproStep}</Box>}
+                        {numericalPreproStep=="Encoding"&&<Box sx={{color:"whitesmoke"}}>{numericalPreproStep}</Box>}
+                        {numericalPreproStep=="Scaling and Outliers"&&<Box sx={{color:"whitesmoke"}}>{numericalPreproStep}</Box>}
+                    </Box>
                 }  
             </Box>
         </Box>
