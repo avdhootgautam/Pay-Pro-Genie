@@ -5,7 +5,7 @@ import HelpOutlineIcon from "@mui/icons-material/HelpOutline"; // Missing Values
 import StraightenIcon from "@mui/icons-material/Straighten";   // Scaling
 import ScatterPlotIcon from "@mui/icons-material/ScatterPlot"; // Handling outliers
 
-const PreprocessingSideBar = ({ open, setOpen }) => {
+const PreprocessingSideBar = ({ open, setOpen ,setNumericalPreproStep}) => {
   const toggleDrawer = (newOpen) => {
     setOpen(newOpen);
   };
@@ -36,6 +36,7 @@ const PreprocessingSideBar = ({ open, setOpen }) => {
                   transition: "all 0.2s ease-in-out",
                 },
               }}
+              onClick={()=>{setNumericalPreproStep(item.text)}}
             >
               <ListItemIcon sx={{ color: "#90caf9" }}>{item.icon}</ListItemIcon>
               <ListItemText
