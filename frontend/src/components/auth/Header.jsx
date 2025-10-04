@@ -27,6 +27,24 @@ const Header=()=>{
         if(location.pathname!="/result")
         {Navigate('/result', { replace: true })}
     }
+    // const NavBarStyling={transition: "all 0.3s ease","&:hover":{transform:"scale(2.05)"},"&:active": {transform: "scale(0.95)"}}
+    const NavBarStyling = {
+            color: "white",
+            fontSize: "14px",
+            fontWeight: 500,
+            textTransform: "none",
+            marginLeft: "10px",
+            padding: "6px 16px",
+            borderRadius: "6px",
+            transition: "all 0.3s ease",
+            "&:hover": {
+                backgroundColor: "rgba(255,255,255,0.1)", // subtle glassy hover
+                transform: "scale(1.35)",                 // zoom effect
+            },
+            "&:active": {
+                transform: "scale(0.95)",                 // shrink on click
+            },
+        };
     return(
         <Box className={styles.header}>
             <Box className={styles.logo_with_title}>
@@ -34,11 +52,11 @@ const Header=()=>{
                 <span style={{ color: "white"}}>Data Preprocesing Hub</span>
             </Box>
             <Box className={styles.navBar} component="nav">
-                <Button onClick={handleHomeButton}>Home</Button>
-                <Button onClick={handleDatasetUploadButton}>Dataset Upload</Button>
-                <Button onClick={handleResultButton}>Results</Button>
-                <Button>Documentation</Button>
-                <Button onClick={handleOpen}>Profile</Button>
+                <Button onClick={handleHomeButton} sx={NavBarStyling}>Home</Button>
+                <Button onClick={handleDatasetUploadButton}sx={NavBarStyling}>Dataset Upload</Button>
+                <Button onClick={handleResultButton}sx={NavBarStyling}>Results</Button>
+                <Button sx={NavBarStyling}>Documentation</Button>
+                <Button onClick={handleOpen}sx={NavBarStyling}>Profile</Button>
             </Box>
         </Box>
     )

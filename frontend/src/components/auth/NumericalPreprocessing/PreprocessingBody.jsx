@@ -9,6 +9,7 @@ import LongMenu from "./PreprocessingDropdown";
 import userData from "../../../services/userData";
 import fetchListOfFilenames from "../../../services/fetchListOfFilenames";
 import fetch_sample_data_for_table from "../../../services/fetching_sample_data_for_table";
+import MissingValues from "./MissingValues";
 const PreprocessingBody=()=>{
     const [open,setOpen]=useState(false)
     const [task_id,setTask_id]=useState("")
@@ -143,16 +144,20 @@ const PreprocessingBody=()=>{
                             transform: "scale(1.05)",  // slight zoom
                             boxShadow: "0px 4px 20px rgba(0,0,0,0.3)", // subtle shadow
                             },
+                            "&:active": {
+                                    transform: "scale(0.95)", // small shrink on click
+                                    },
                         }}
                         >Previous
                     </Button>
                 </Box>
                 }
                 {open_table && numericalPreproStep&&
-                    <Box sx={{border:"0.25px outset whitesmoke",height:"210px",width:"80%",marginLeft:'5px'}}>
-                        {numericalPreproStep=="Missing Values"&&<Box sx={{color:"whitesmoke"}}>{numericalPreproStep}</Box>}
-                        {numericalPreproStep=="Encoding"&&<Box sx={{color:"whitesmoke"}}>{numericalPreproStep}</Box>}
-                        {numericalPreproStep=="Scaling and Outliers"&&<Box sx={{color:"whitesmoke"}}>{numericalPreproStep}</Box>}
+                    <Box sx={{border:"0.25px outset whitesmoke",height:"210px",width:"80%",marginLeft:'5px',borderRadius:'4px'}}>
+                        {/* <Box sx={{color:"whitesmoke"}}>{numericalPreproStep}</Box> */}
+                        {/* {numericalPreproStep=="Encoding"&&<Box sx={{color:"whitesmoke"}}>{numericalPreproStep}</Box>}
+                        {numericalPreproStep=="Scaling and Outliers"&&<Box sx={{color:"whitesmoke"}}>{numericalPreproStep}</Box>} */}
+                        {numericalPreproStep=="Missing Values"&&<MissingValues numericalPreproStep={numericalPreproStep}/>}
                     </Box>
                 }  
             </Box>
