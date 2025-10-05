@@ -10,6 +10,8 @@ import userData from "../../../services/userData";
 import fetchListOfFilenames from "../../../services/fetchListOfFilenames";
 import fetch_sample_data_for_table from "../../../services/fetching_sample_data_for_table";
 import MissingValues from "./MissingValues";
+import EncodingValues from "./EncodingValues";
+import ScalingValues from "./ScalingValues";
 const PreprocessingBody=()=>{
     const [open,setOpen]=useState(false)
     const [task_id,setTask_id]=useState("")
@@ -26,6 +28,7 @@ const PreprocessingBody=()=>{
     const [rows,setRows]=useState([])
     const [columns,setColumns]=useState([])
     const [numericalPreproStep,setNumericalPreproStep]=useState(null)
+    const [strategy,setStrategy]=useState(null)
     useEffect(()=>{
             const handleUseEffect=()=>{
                 // if(!task_id || !preprocessingStep){
@@ -116,7 +119,26 @@ const PreprocessingBody=()=>{
                 fetching_sample_data(payload_for_sample_table_data)
             }
         },[filename])
-    
+        const previousButtonStyle={
+            border: "1px solid rgba(248,250,252,0.4)",
+            color: "whitesmoke",
+            fontSize: "12px",
+            padding: "8px 32px",
+            textTransform: "none",
+            transition: "all 0.3s ease", // 👈 smooth animation
+            marginLeft:"10px",
+            marginTop:"3px",
+            "&:hover": {
+            backgroundColor:"rgba(1, 6, 7, 0.3)",
+            borderColor: "#2be780ff",
+            transform: "scale(1.05)",
+            boxShadow: "0px 0px 10px rgba(18, 223, 110, 0.6)",
+            // boxShadow: "0px 0px 10px rgba(110, 108, 214 ,0.6)",
+            },
+            "&:active": {
+            transform: "scale(0.95)", // small shrink on click
+        },
+        }
 
     return (
         <Box className={styles.PreprocessingBody}>
@@ -132,32 +154,17 @@ const PreprocessingBody=()=>{
                 {open_table && 
                 <Box >
                     <PreprocessingTable rows={rows} columns={columns}/>
-                    <Button  variant="contained" color="primary"
-                         sx={{
-                            borderRadius: "8px",
-                            marginTop:"0.3rem",
-                            marginLeft:"0.5rem",
-                            transition: "all 0.3s ease", // smooth hover effect
-                            backgroundColor: "#1976d2",  // default color
-                            "&:hover": {
-                            backgroundColor: "#385b83ff", // darker shade on hover
-                            transform: "scale(1.05)",  // slight zoom
-                            boxShadow: "0px 4px 20px rgba(0,0,0,0.3)", // subtle shadow
-                            },
-                            "&:active": {
-                                    transform: "scale(0.95)", // small shrink on click
-                                    },
-                        }}
+                    <Button  
+                         sx={previousButtonStyle}
                         >Previous
                     </Button>
                 </Box>
                 }
                 {open_table && numericalPreproStep&&
-                    <Box sx={{border:"0.25px outset whitesmoke",height:"210px",width:"80%",marginLeft:'5px',borderRadius:'4px'}}>
-                        {/* <Box sx={{color:"whitesmoke"}}>{numericalPreproStep}</Box> */}
-                        {/* {numericalPreproStep=="Encoding"&&<Box sx={{color:"whitesmoke"}}>{numericalPreproStep}</Box>}
-                        {numericalPreproStep=="Scaling and Outliers"&&<Box sx={{color:"whitesmoke"}}>{numericalPreproStep}</Box>} */}
-                        {numericalPreproStep=="Missing Values"&&<MissingValues numericalPreproStep={numericalPreproStep}/>}
+                    <Box sx={{border:"1px solid rgba(248,250,252,0.4)",height:"210px",width:"80%",marginLeft:'5px',borderRadius:'4px'}}>
+                        {numericalPreproStep=="Missing Values"&&<MissingValues numericalPreproStep={numericalPreproStep} setStrategy={setStrategy} strategy={strategy}/>}
+                        {numericalPreproStep=="Encoding" && <EncodingValues numericalPreproStep={numericalPreproStep}/> }
+                        {numericalPreproStep=="Scaling and Outliers" && <ScalingValues numericalPreproStep={numericalPreproStep}/>}
                     </Box>
                 }  
             </Box>

@@ -26,7 +26,7 @@ const PreprocessingTable = (props) => {
       width: '70%',
       marginLeft:'10px',
       marginTop:'10px',
-      border:'1.5px dashed white',
+      border:"1px solid rgba(248,250,252,0.4)",
       borderRadius:"1px"
       }}>
       <DataGrid
