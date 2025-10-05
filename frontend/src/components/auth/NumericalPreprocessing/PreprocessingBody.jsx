@@ -29,6 +29,8 @@ const PreprocessingBody=()=>{
     const [columns,setColumns]=useState([])
     const [numericalPreproStep,setNumericalPreproStep]=useState(null)
     const [strategy,setStrategy]=useState(null)
+    const [columnPrepro,setColumnPrePro]=useState(null)
+    const [finalOperation,setApplyAndSaveButton]=useState(null)
     useEffect(()=>{
             const handleUseEffect=()=>{
                 // if(!task_id || !preprocessingStep){
@@ -149,7 +151,14 @@ const PreprocessingBody=()=>{
                 {preprocessingStep==="1"&&<Typography sx={{fontSize:"5rem",fontFamily: "Poppins, sans-serif"}}>Image Preprocessing</Typography>}
                 {preprocessingStep==="2"&&<Typography sx={{fontSize:"1.5rem",fontFamily: "Poppins, sans-serif"}}>Numerical Preprocessing</Typography>}
                 {preprocessingStep==="3"&&<Typography>Text Preprocessing</Typography>}
-                <Box ><LongMenu anchorEl={anchorEl} setAnchorEl={setAnchorEl} open_table ={open_table } setOpenTable={setOpenTable} setFileName={setFileName} filenames={filenames} /></Box>
+                <Box>
+                    <LongMenu anchorEl={anchorEl} 
+                    setAnchorEl={setAnchorEl} 
+                    open_table ={open_table } 
+                    setOpenTable={setOpenTable} 
+                    setFileName={setFileName} 
+                    filenames={filenames} />
+                </Box>
                 </Box>
                 {open_table && 
                 <Box >
@@ -162,9 +171,33 @@ const PreprocessingBody=()=>{
                 }
                 {open_table && numericalPreproStep&&
                     <Box sx={{border:"1px solid rgba(248,250,252,0.4)",height:"210px",width:"80%",marginLeft:'5px',borderRadius:'4px'}}>
-                        {numericalPreproStep=="Missing Values"&&<MissingValues numericalPreproStep={numericalPreproStep} setStrategy={setStrategy} strategy={strategy}/>}
-                        {numericalPreproStep=="Encoding" && <EncodingValues numericalPreproStep={numericalPreproStep}/> }
-                        {numericalPreproStep=="Scaling and Outliers" && <ScalingValues numericalPreproStep={numericalPreproStep}/>}
+                        {numericalPreproStep=="Missing Values"&&
+                        <MissingValues numericalPreproStep={numericalPreproStep} 
+                        setStrategy={setStrategy} strategy={strategy} 
+                        columnPrepro={columnPrepro} 
+                        setColumnPrePro={setColumnPrePro} 
+                        finalOperation={finalOperation}
+                        setApplyAndSaveButton={setApplyAndSaveButton}/>}
+
+
+                        {numericalPreproStep=="Encoding" && 
+                        <EncodingValues numericalPreproStep={numericalPreproStep} 
+                        setStrategy={setStrategy} 
+                        strategy={strategy}
+                        columnPrepro={columnPrepro}
+                        setColumnPrePro={setColumnPrePro} 
+                        finalOperation={finalOperation}
+                        setApplyAndSaveButton={setApplyAndSaveButton}/> }
+
+
+                        {numericalPreproStep=="Scaling and Outliers" && 
+                        <ScalingValues numericalPreproStep={numericalPreproStep} 
+                        setStrategy={setStrategy} 
+                        strategy={strategy} 
+                        columnPrepro={columnPrepro} 
+                        setColumnPrePro={setColumnPrePro} 
+                        finalOperation={finalOperation} 
+                        setApplyAndSaveButton={setApplyAndSaveButton}/>}
                     </Box>
                 }  
             </Box>
