@@ -456,5 +456,19 @@ def fetch_the_sample_data_from_db_for_table():
     }
     return jsonify(json_data),201
 
+@app.route("/api/preprocessing",methods=["POST"])
+@jwt_required()
+def apply_preprocessing():
+    logger.info("In a /api/preprocessing")
+    try:
+        payload=request.get_json()
+        logger.debug(f"IN api,This is the payload received :: {payload}")
+    except Exception as e:
+        logger.error(f"In api, error is:: {e}")
+        return jsonify({"error":f"In api,error is:: {e}"}),500
+    
+    return jsonify({"message":"Successfully Preprocessing Done"}),201
+
+
 if __name__=="__main__":
     app.run(debug=True)

@@ -12,6 +12,7 @@ import fetch_sample_data_for_table from "../../../services/fetching_sample_data_
 import MissingValues from "./MissingValues";
 import EncodingValues from "./EncodingValues";
 import ScalingValues from "./ScalingValues";
+import preprocessingService from "../../../services/preprocessingService";
 const PreprocessingBody=()=>{
     const [open,setOpen]=useState(false)
     const [task_id,setTask_id]=useState("")
@@ -121,6 +122,9 @@ const PreprocessingBody=()=>{
                 fetching_sample_data(payload_for_sample_table_data)
             }
         },[filename])
+
+
+
         const previousButtonStyle={
             border: "1px solid rgba(248,250,252,0.4)",
             color: "whitesmoke",
@@ -140,6 +144,17 @@ const PreprocessingBody=()=>{
             "&:active": {
             transform: "scale(0.95)", // small shrink on click
         },
+        }
+
+        if (finalOperation=="Apply"){
+            const payload={
+                "task_id":task_id,
+                "columnPrepro":columnPrepro,
+                "strategy":strategy,
+                "finalOperation":finalOperation
+            }
+            const response=preprocessingService(payload)
+            alert("Preprocessing Applied and this is the response::"+response)
         }
 
     return (
